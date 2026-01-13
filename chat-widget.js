@@ -4,20 +4,22 @@
   // Get configuration from window or use defaults
   const userConfig = window.BlackOrbitConfig || {};
   
-  // Widget Configuration with defaults
+  // Widget Configuration with defaults (SIMPLIFIED - only essential variables)
   const CONFIG = {
     webhookUrl: userConfig.webhookUrl || '',
     primaryColor: userConfig.primaryColor || '#212121',
-    secondaryColor: userConfig.secondaryColor || '#f8f9fa',
-    textColor: userConfig.textColor || '#333333',
-    backgroundColor: userConfig.backgroundColor || '#ffffff',
-    buttonIconColor: userConfig.buttonIconColor || '#ffffff',
     chatTitle: userConfig.chatTitle || 'Asistente AI',
     inputPlaceholder: userConfig.inputPlaceholder || 'Escribe tu mensaje...',
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/'
   };
+
+  // Derived colors (automatically calculated from primaryColor)
+  const secondaryColor = '#f8f9fa';
+  const textColor = '#333333';
+  const backgroundColor = '#ffffff';
+  const buttonIconColor = '#ffffff';
 
   // Validate webhook URL
   if (!CONFIG.webhookUrl) {
@@ -135,7 +137,7 @@
       right: 0;
       width: 350px;
       height: 500px;
-      background: ${CONFIG.backgroundColor};
+      background: ${backgroundColor};
       border-radius: 12px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
       display: none;
@@ -177,7 +179,7 @@
       flex: 1;
       overflow-y: auto;
       padding: 16px;
-      background: ${CONFIG.secondaryColor};
+      background: ${secondaryColor};
       position: relative;
     }
     
@@ -204,7 +206,7 @@
     
     #n8n-terms-banner p {
       margin: 0;
-      color: ${CONFIG.textColor};
+      color: ${textColor};
       font-size: 13px;
       line-height: 1.5;
     }
@@ -228,7 +230,7 @@
     #n8n-input-area {
       padding: 16px;
       border-top: 1px solid #e1e5e9;
-      background: ${CONFIG.backgroundColor};
+      background: ${backgroundColor};
       position: relative;
       z-index: 1001;
     }
@@ -245,8 +247,8 @@
       border-radius: 20px;
       outline: none;
       font-size: 16px;
-      background: ${CONFIG.backgroundColor};
-      color: ${CONFIG.textColor};
+      background: ${backgroundColor};
+      color: ${textColor};
       -webkit-appearance: none;
       -webkit-border-radius: 20px;
       height: 40px;
@@ -277,7 +279,7 @@
     
     #n8n-typing {
       padding: 8px 16px;
-      background: ${CONFIG.secondaryColor};
+      background: ${secondaryColor};
       border-top: 1px solid #e1e5e9;
       display: none;
       font-size: 12px;
@@ -286,7 +288,7 @@
     
     #n8n-powered-by {
       padding: 8px 16px;
-      background: ${CONFIG.backgroundColor};
+      background: ${backgroundColor};
       border-top: 1px solid #e1e5e9;
       text-align: center;
       font-size: 11px;
@@ -331,7 +333,7 @@
     
     .n8n-message.bot .n8n-message-bubble {
       background: white;
-      color: ${CONFIG.textColor};
+      color: ${textColor};
       border: 1px solid #e1e5e9;
       border-bottom-left-radius: 6px;
     }
@@ -499,7 +501,7 @@
         max-width: none !important;
         max-height: none !important;
         border: none !important;
-        background: ${CONFIG.secondaryColor} !important;
+        background: ${secondaryColor} !important;
       }
       
       #n8n-chat-header {
@@ -566,10 +568,10 @@
     
     widget.innerHTML = `
       <div id="n8n-chat-toggle">
-        <svg id="n8n-chat-icon" width="28" height="28" fill="${CONFIG.buttonIconColor}" viewBox="0 0 24 24">
+        <svg id="n8n-chat-icon" width="28" height="28" fill="${buttonIconColor}" viewBox="0 0 24 24">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
         </svg>
-        <svg id="n8n-close-icon" width="28" height="28" fill="${CONFIG.buttonIconColor}" viewBox="0 0 24 24" style="display: none;">
+        <svg id="n8n-close-icon" width="28" height="28" fill="${buttonIconColor}" viewBox="0 0 24 24" style="display: none;">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
         </svg>
       </div>
