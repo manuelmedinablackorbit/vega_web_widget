@@ -6,45 +6,53 @@
   const CONFIG = {
     webhookUrl: userConfig.webhookUrl || '',
     
+    // SECTION DESIGN
+    sectionTitle: userConfig.sectionTitle || 'Habla con nuestro asistente',
+    sectionSubtitle: userConfig.sectionSubtitle || 'Estamos aquí para ayudarte. Pregúntanos lo que necesites.',
+    showSectionHeader: userConfig.showSectionHeader !== false,
+    
     // LAYOUT
     containerId: userConfig.containerId || 'blackorbit-chat-section',
     maxWidth: userConfig.maxWidth || '1200px',
-    height: userConfig.height || '600px',
-    
-    // BACKGROUND  
-    hasBackground: userConfig.hasBackground !== false,
-    backgroundColor: userConfig.backgroundColor || '#f8f9fa',
+    chatHeight: userConfig.chatHeight || '500px',
     
     // COLORS
     primaryColor: userConfig.primaryColor || '#212121',
     secondaryColor: userConfig.secondaryColor || '#ffffff',
+    backgroundColor: userConfig.backgroundColor || '#f8f9fa',
+    sectionBgColor: userConfig.sectionBgColor || '#ffffff',
     textColor: userConfig.textColor || '#333333',
     
     // BORDER RADIUS
-    containerBorderRadius: userConfig.containerBorderRadius || '12px',
+    chatBorderRadius: userConfig.chatBorderRadius || '12px',
     messageBorderRadius: userConfig.messageBorderRadius || '18px',
     inputBorderRadius: userConfig.inputBorderRadius || '20px',
     
     // TYPOGRAPHY
     fontFamily: userConfig.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     fontSize: userConfig.fontSize || '14px',
+    titleFontSize: userConfig.titleFontSize || '32px',
+    subtitleFontSize: userConfig.subtitleFontSize || '16px',
     
-    // ORIGINAL WIDGET CONFIG (don't touch these)
-    chatTitle: userConfig.chatTitle || 'Asistente AI',
+    // SPACING
+    sectionPadding: userConfig.sectionPadding || '60px 20px',
+    
+    // CHAT CONFIG
+    chatTitle: userConfig.chatTitle || 'Chat en vivo',
     inputPlaceholder: userConfig.inputPlaceholder || 'Escribe tu mensaje...',
-    termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
-    termsLinkText: userConfig.termsLinkText || 'Aquí',
+    termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad',
+    termsLinkText: userConfig.termsLinkText || 'Ver política',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/'
   };
 
   if (!CONFIG.webhookUrl) {
-    console.error('BlackOrbit Section Error: webhookUrl is required');
+    console.error('BlackOrbit: webhookUrl is required');
     return;
   }
 
   const SESSION_ID = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-  // ========== MARKDOWN PARSER (EXACT COPY FROM WIDGET) ==========
+  // ========== MARKDOWN PARSER ==========
   function parseMarkdown(text) {
     if (!text || typeof text !== 'string') return text;
     
@@ -93,311 +101,388 @@
   const css = `
     #${CONFIG.containerId} {
       width: 100%;
-      max-width: ${CONFIG.maxWidth};
-      height: ${CONFIG.height};
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
+      padding: ${CONFIG.sectionPadding};
+      background: ${CONFIG.sectionBgColor};
       font-family: ${CONFIG.fontFamily};
-      ${CONFIG.hasBackground ? `background: ${CONFIG.backgroundColor};` : ''}
-      ${CONFIG.hasBackground ? `border-radius: ${CONFIG.containerBorderRadius};` : ''}
-      ${CONFIG.hasBackground ? 'box-shadow: 0 2px 12px rgba(0,0,0,0.08);' : ''}
-      overflow: hidden;
     }
     
-    #bo-section-header {
+    .bo-section-container {
+      max-width: ${CONFIG.maxWidth};
+      margin: 0 auto;
+    }
+    
+    ${CONFIG.showSectionHeader ? `
+    .bo-section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .bo-section-title {
+      font-size: ${CONFIG.titleFontSize};
+      font-weight: 700;
+      color: ${CONFIG.textColor};
+      margin: 0 0 12px 0;
+      line-height: 1.2;
+    }
+    
+    .bo-section-subtitle {
+      font-size: ${CONFIG.subtitleFontSize};
+      color: #666;
+      margin: 0;
+      line-height: 1.5;
+    }
+    ` : ''}
+    
+    .bo-chat-wrapper {
+      background: ${CONFIG.backgroundColor};
+      border-radius: ${CONFIG.chatBorderRadius};
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: ${CONFIG.chatHeight};
+    }
+    
+    .bo-chat-header {
       background: ${CONFIG.primaryColor};
       color: white;
       padding: 16px 20px;
       font-weight: 600;
       font-size: 16px;
       text-align: center;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
     }
     
-    #bo-section-messages {
+    .bo-chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      padding: 20px;
       background: ${CONFIG.secondaryColor};
     }
     
-    #bo-section-terms {
+    .bo-chat-terms {
       background: white;
       border: 1px solid #e1e5e9;
       border-radius: 8px;
-      padding: 16px;
-      margin: 20px 8px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     
-    #bo-section-terms svg {
+    .bo-chat-terms svg {
       margin-bottom: 12px;
       opacity: 0.6;
     }
     
-    #bo-section-terms p {
+    .bo-chat-terms p {
       margin: 0;
       color: ${CONFIG.textColor};
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.6;
     }
     
-    #bo-section-terms a {
+    .bo-chat-terms a {
       color: ${CONFIG.primaryColor};
       text-decoration: none;
       font-weight: 500;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s;
     }
     
-    #bo-section-terms a:hover {
-      text-decoration: underline;
+    .bo-chat-terms a:hover {
+      border-bottom: 1px solid ${CONFIG.primaryColor};
     }
     
-    #bo-section-messages.has-messages #bo-section-terms {
+    .bo-chat-messages.has-messages .bo-chat-terms {
       display: none;
     }
     
-    #bo-section-input {
-      padding: 16px;
+    .bo-chat-typing {
+      padding: 12px 20px;
+      background: ${CONFIG.secondaryColor};
       border-top: 1px solid #e1e5e9;
-      background: ${CONFIG.hasBackground ? CONFIG.secondaryColor : '#ffffff'};
+      display: none;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
     }
     
-    #bo-section-input-container {
+    .bo-chat-input-area {
+      padding: 20px;
+      border-top: 1px solid #e1e5e9;
+      background: white;
+    }
+    
+    .bo-chat-input-container {
       display: flex;
-      gap: 8px;
+      gap: 12px;
+      max-width: 800px;
+      margin: 0 auto;
     }
     
-    #bo-section-message-input {
+    .bo-chat-input {
       flex: 1;
-      padding: 12px;
-      border: 1px solid #e1e5e9;
+      padding: 14px 18px;
+      border: 2px solid #e1e5e9;
       border-radius: ${CONFIG.inputBorderRadius};
       outline: none;
       font-size: ${CONFIG.fontSize};
       font-family: ${CONFIG.fontFamily};
       background: white;
       color: ${CONFIG.textColor};
+      transition: all 0.2s;
     }
     
-    #bo-section-message-input:focus {
+    .bo-chat-input:focus {
       border-color: ${CONFIG.primaryColor};
-      box-shadow: 0 0 0 3px color-mix(in srgb, ${CONFIG.primaryColor} 20%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, ${CONFIG.primaryColor} 15%, transparent);
     }
     
-    #bo-section-send-btn {
+    .bo-chat-send-btn {
       background: ${CONFIG.primaryColor};
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
     
-    #bo-section-send-btn:hover {
+    .bo-chat-send-btn:hover {
       transform: scale(1.05);
-      opacity: 0.9;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     
-    #bo-section-typing {
-      padding: 8px 16px;
-      background: ${CONFIG.secondaryColor};
-      border-top: 1px solid #e1e5e9;
-      display: none;
-      font-size: 12px;
-      color: #666;
+    .bo-chat-send-btn:active {
+      transform: scale(0.95);
     }
     
-    #bo-section-powered {
-      padding: 8px 16px;
-      background: ${CONFIG.hasBackground ? CONFIG.secondaryColor : '#ffffff'};
+    .bo-chat-powered {
+      padding: 12px 20px;
+      background: white;
       border-top: 1px solid #e1e5e9;
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: #888;
     }
     
-    #bo-section-powered a {
+    .bo-chat-powered a {
       color: ${CONFIG.primaryColor};
       text-decoration: none;
       font-weight: 500;
+      transition: opacity 0.2s;
     }
     
-    #bo-section-powered a:hover {
+    .bo-chat-powered a:hover {
+      opacity: 0.8;
       text-decoration: underline;
     }
     
-    .bo-section-message {
-      margin-bottom: 12px;
+    .bo-message {
+      margin-bottom: 16px;
       display: flex;
+      animation: slideIn 0.3s ease;
     }
     
-    .bo-section-message.user {
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .bo-message.user {
       justify-content: flex-end;
     }
     
-    .bo-section-message-bubble {
-      max-width: 80%;
-      padding: 10px 14px;
+    .bo-message-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
       border-radius: ${CONFIG.messageBorderRadius};
       font-size: ${CONFIG.fontSize};
-      line-height: 1.4;
+      line-height: 1.5;
       word-wrap: break-word;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
-    .bo-section-message.user .bo-section-message-bubble {
+    .bo-message.user .bo-message-bubble {
       background: ${CONFIG.primaryColor};
       color: white;
-      border-bottom-right-radius: 6px;
+      border-bottom-right-radius: 4px;
     }
     
-    .bo-section-message.bot .bo-section-message-bubble {
+    .bo-message.bot .bo-message-bubble {
       background: white;
       color: ${CONFIG.textColor};
       border: 1px solid #e1e5e9;
-      border-bottom-left-radius: 6px;
+      border-bottom-left-radius: 4px;
     }
     
-    .bo-section-message-bubble h1,
-    .bo-section-message-bubble h2,
-    .bo-section-message-bubble h3 {
-      margin: 8px 0 4px 0;
-      line-height: 1.2;
+    .bo-message-bubble h1,
+    .bo-message-bubble h2,
+    .bo-message-bubble h3 {
+      margin: 10px 0 6px 0;
+      line-height: 1.3;
     }
     
-    .bo-section-message-bubble h1 { font-size: 18px; font-weight: 600; }
-    .bo-section-message-bubble h2 { font-size: 16px; font-weight: 600; }
-    .bo-section-message-bubble h3 { font-size: 14px; font-weight: 600; }
+    .bo-message-bubble h1 { font-size: 20px; font-weight: 600; }
+    .bo-message-bubble h2 { font-size: 18px; font-weight: 600; }
+    .bo-message-bubble h3 { font-size: 16px; font-weight: 600; }
     
-    .bo-section-message-bubble p {
+    .bo-message-bubble p {
       margin: 8px 0;
-      line-height: 1.4;
+      line-height: 1.5;
     }
     
-    .bo-section-message-bubble strong { font-weight: 600; }
-    .bo-section-message-bubble em { font-style: italic; }
+    .bo-message-bubble strong { font-weight: 600; }
+    .bo-message-bubble em { font-style: italic; }
     
-    .bo-section-message-bubble code {
-      background: rgba(0,0,0,0.05);
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: 12px;
+    .bo-message-bubble code {
+      background: rgba(0,0,0,0.06);
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 13px;
     }
     
-    .bo-section-message.user .bo-section-message-bubble code {
-      background: rgba(255,255,255,0.2);
+    .bo-message.user .bo-message-bubble code {
+      background: rgba(255,255,255,0.25);
     }
     
-    .bo-section-message-bubble pre {
-      background: rgba(0,0,0,0.05);
-      padding: 8px;
+    .bo-message-bubble pre {
+      background: rgba(0,0,0,0.06);
+      padding: 12px;
       border-radius: 6px;
-      margin: 8px 0;
+      margin: 10px 0;
       overflow-x: auto;
     }
     
-    .bo-section-message.user .bo-section-message-bubble pre {
-      background: rgba(255,255,255,0.2);
+    .bo-message.user .bo-message-bubble pre {
+      background: rgba(255,255,255,0.25);
     }
     
-    .bo-section-message-bubble pre code {
+    .bo-message-bubble pre code {
       background: none;
       padding: 0;
-      font-size: 12px;
+      font-size: 13px;
       display: block;
       white-space: pre;
     }
     
-    .bo-section-message-bubble blockquote {
+    .bo-message-bubble blockquote {
       border-left: 3px solid #ddd;
       padding-left: 12px;
-      margin: 8px 0;
+      margin: 10px 0;
       font-style: italic;
-      opacity: 0.8;
+      opacity: 0.85;
     }
     
-    .bo-section-message.user .bo-section-message-bubble blockquote {
-      border-left-color: rgba(255,255,255,0.4);
+    .bo-message.user .bo-message-bubble blockquote {
+      border-left-color: rgba(255,255,255,0.5);
     }
     
-    .bo-section-message-bubble ul,
-    .bo-section-message-bubble ol {
-      margin: 8px 0;
-      padding-left: 20px;
+    .bo-message-bubble ul,
+    .bo-message-bubble ol {
+      margin: 10px 0;
+      padding-left: 24px;
     }
     
-    .bo-section-message-bubble li {
-      margin: 4px 0;
-      line-height: 1.4;
+    .bo-message-bubble li {
+      margin: 6px 0;
+      line-height: 1.5;
     }
     
-    .bo-section-message-bubble a {
+    .bo-message-bubble a {
       color: inherit;
       text-decoration: underline;
-      opacity: 0.8;
+      opacity: 0.85;
+      transition: opacity 0.2s;
     }
     
-    .bo-section-message-bubble a:hover {
+    .bo-message-bubble a:hover {
       opacity: 1;
     }
     
-    .bo-section-message-bubble img {
+    .bo-message-bubble img {
       max-width: 100%;
       height: auto;
-      border-radius: 4px;
-      margin: 4px 0;
+      border-radius: 6px;
+      margin: 8px 0;
       display: block;
     }
     
-    .bo-section-typing-dots {
-      display: flex;
-      gap: 2px;
-      align-items: center;
+    .bo-typing-dots {
+      display: inline-flex;
+      gap: 4px;
+      margin-right: 8px;
     }
     
-    .bo-section-typing-dots div {
-      width: 4px;
-      height: 4px;
+    .bo-typing-dots div {
+      width: 6px;
+      height: 6px;
       background: #666;
       border-radius: 50%;
-      animation: bo-typing 1.4s infinite ease-in-out;
+      animation: typing 1.4s infinite ease-in-out;
     }
     
-    .bo-section-typing-dots div:nth-child(1) { animation-delay: -0.32s; }
-    .bo-section-typing-dots div:nth-child(2) { animation-delay: -0.16s; }
+    .bo-typing-dots div:nth-child(1) { animation-delay: -0.32s; }
+    .bo-typing-dots div:nth-child(2) { animation-delay: -0.16s; }
     
-    @keyframes bo-typing {
-      0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
       40% { transform: scale(1); opacity: 1; }
     }
     
-    #bo-section-messages::-webkit-scrollbar {
-      width: 6px;
+    .bo-chat-messages::-webkit-scrollbar {
+      width: 8px;
     }
     
-    #bo-section-messages::-webkit-scrollbar-track {
-      background: transparent;
+    .bo-chat-messages::-webkit-scrollbar-track {
+      background: #f1f1f1;
     }
     
-    #bo-section-messages::-webkit-scrollbar-thumb {
+    .bo-chat-messages::-webkit-scrollbar-thumb {
       background: #ccc;
-      border-radius: 3px;
+      border-radius: 4px;
     }
     
-    #bo-section-messages::-webkit-scrollbar-thumb:hover {
-      background: #aaa;
+    .bo-chat-messages::-webkit-scrollbar-thumb:hover {
+      background: #999;
     }
     
     @media (max-width: 768px) {
       #${CONFIG.containerId} {
-        height: 100vh;
-        max-width: 100%;
-        border-radius: 0;
+        padding: 40px 16px;
+      }
+      
+      .bo-section-title {
+        font-size: 28px;
+      }
+      
+      .bo-section-subtitle {
+        font-size: 15px;
+      }
+      
+      .bo-chat-wrapper {
+        height: 500px;
+      }
+      
+      .bo-message-bubble {
+        max-width: 85%;
+      }
+      
+      .bo-chat-input {
+        font-size: 16px;
       }
     }
   `;
@@ -411,41 +496,50 @@
     }
     
     container.innerHTML = `
-      <div id="bo-section-header">${CONFIG.chatTitle}</div>
-      
-      <div id="bo-section-messages">
-        <div id="bo-section-terms">
-          <svg width="24" height="24" fill="${CONFIG.primaryColor}" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-          </svg>
-          <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" rel="noopener noreferrer">${CONFIG.termsLinkText}</a></p>
+      <div class="bo-section-container">
+        ${CONFIG.showSectionHeader ? `
+        <div class="bo-section-header">
+          <h2 class="bo-section-title">${CONFIG.sectionTitle}</h2>
+          <p class="bo-section-subtitle">${CONFIG.sectionSubtitle}</p>
         </div>
-      </div>
-      
-      <div id="bo-section-typing">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <div class="bo-section-typing-dots">
-            <div></div>
-            <div></div>
-            <div></div>
+        ` : ''}
+        
+        <div class="bo-chat-wrapper">
+          <div class="bo-chat-header">${CONFIG.chatTitle}</div>
+          
+          <div class="bo-chat-messages">
+            <div class="bo-chat-terms">
+              <svg width="24" height="24" fill="${CONFIG.primaryColor}" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+              <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" rel="noopener noreferrer">${CONFIG.termsLinkText}</a></p>
+            </div>
           </div>
-          Assistant is typing...
+          
+          <div class="bo-chat-typing">
+            <div class="bo-typing-dots">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            Escribiendo...
+          </div>
+          
+          <div class="bo-chat-input-area">
+            <div class="bo-chat-input-container">
+              <input type="text" class="bo-chat-input" placeholder="${CONFIG.inputPlaceholder}" />
+              <button type="button" class="bo-chat-send-btn">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="bo-chat-powered">
+            Powered by <a href="https://blackorbitai.com/" target="_blank">BlackOrbitAI</a>
+          </div>
         </div>
-      </div>
-      
-      <div id="bo-section-input">
-        <div id="bo-section-input-container">
-          <input type="text" id="bo-section-message-input" placeholder="${CONFIG.inputPlaceholder}" />
-          <button type="button" id="bo-section-send-btn">
-            <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      
-      <div id="bo-section-powered">
-        Powered by <a href="https://blackorbitai.com/" target="_blank">BlackOrbitAI</a>
       </div>
     `;
     
@@ -461,10 +555,10 @@
     const section = createSection();
     if (!section) return;
     
-    const messageInput = document.getElementById('bo-section-message-input');
-    const sendBtn = document.getElementById('bo-section-send-btn');
-    const messagesContainer = document.getElementById('bo-section-messages');
-    const typingIndicator = document.getElementById('bo-section-typing');
+    const messageInput = section.querySelector('.bo-chat-input');
+    const sendBtn = section.querySelector('.bo-chat-send-btn');
+    const messagesContainer = section.querySelector('.bo-chat-messages');
+    const typingIndicator = section.querySelector('.bo-chat-typing');
     
     let hasMessages = false;
     let whatsAppIsClicked = 'no';
@@ -482,10 +576,10 @@
       }
       
       const messageEl = document.createElement('div');
-      messageEl.className = `bo-section-message ${isUser ? 'user' : 'bot'}`;
+      messageEl.className = `bo-message ${isUser ? 'user' : 'bot'}`;
       
       const bubble = document.createElement('div');
-      bubble.className = 'bo-section-message-bubble';
+      bubble.className = 'bo-message-bubble';
       
       if (isUser) {
         bubble.textContent = content;
