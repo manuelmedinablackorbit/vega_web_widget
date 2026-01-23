@@ -15,12 +15,6 @@
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/'
   };
 
-  // Derived colors (automatically calculated from primaryColor)
-  const secondaryColor = '#f8f9fa';
-  const textColor = '#0f172a';
-  const backgroundColor = '#ffffff';
-  const buttonIconColor = '#ffffff';
-
   // Validate webhook URL
   if (!CONFIG.webhookUrl) {
     console.error('BlackOrbit Widget Error: webhookUrl is required in BlackOrbitConfig');
@@ -34,7 +28,6 @@
   function parseMarkdown(text) {
     if (!text || typeof text !== 'string') return text;
     
-    // Basic HTML sanitization - remove potentially dangerous tags
     const sanitize = (str) => {
       return str.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
@@ -42,51 +35,28 @@
     };
     
     let html = text;
-    
-    // Convert line breaks to <br> first (but preserve double line breaks for paragraphs)
     html = html.replace(/\r\n/g, '\n');
     html = html.replace(/\n\n+/g, '</p><p>');
     html = html.replace(/\n/g, '<br>');
-    
-    // Wrap in paragraphs if we have paragraph breaks
     if (html.includes('</p><p>')) {
       html = '<p>' + html + '</p>';
     }
     
-    // Headers (must come before bold to avoid conflicts)
     html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
     html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
     html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-    
-    // Bold text (** or __)
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
-    
-    // Inline code (single backticks)
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-    
-    // Code blocks (triple backticks)
     html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-    
-    // Images FIRST (before links to avoid conflict) - ![alt](url)
     html = html.replace(/!\[([^\]]*)\]\(([^\)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;" />');
-    
-    // Links [text](url) - process after images
     html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    
-    // Blockquotes
     html = html.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
-    
-    // Unordered lists
     html = html.replace(/^\* (.*$)/gm, '<li>$1</li>');
     html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
-    
-    // Ordered lists
     html = html.replace(/^\d+\. (.*$)/gm, '<li>$1</li>');
     
-    // Wrap consecutive <li> tags in <ul> or <ol>
     html = html.replace(/(<li>.*?<\/li>)(\s*<li>.*?<\/li>)*/g, function(match) {
-      // Check if this was originally a numbered list
       const originalText = text.substring(text.indexOf(match.replace(/<[^>]*>/g, '').trim()));
       if (/^\d+\./.test(originalText)) {
         return '<ol>' + match + '</ol>';
@@ -95,13 +65,12 @@
       }
     });
     
-    // Auto-link URLs (simple version that won't conflict with existing links)
     html = html.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g, '$1<a href="$2" target="_blank" rel="noopener noreferrer">$2</a>');
     
     return sanitize(html);
   }
 
-  // Create and inject CSS - FIGMA DESIGN (Tailwind converted to CSS)
+  // ========== CSS STYLES ==========
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -113,29 +82,30 @@
       font-family: 'Poppins', sans-serif;
     }
     
-    /* Toggle Button - bg-sky-500 rounded-full p-4 */
     #n8n-chat-toggle {
       width: 56px;
       height: 56px;
+      padding: 16px;
       background: ${CONFIG.primaryColor};
-      border-radius: 9999px;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 12px 24px rgba(94, 118, 144, 0.2);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 12px 24px rgba(94,118,144,0.2);
-      transition: all 0.3s ease;
-      border: none;
-      outline: none;
-      padding: 16px;
+      transition: transform 0.3s;
     }
     
     #n8n-chat-toggle:hover {
       transform: scale(1.05);
-      box-shadow: 0 16px 32px rgba(94,118,144,0.3);
     }
     
-    /* Chat Window - w-80 h-[500px] bg-white rounded-2xl shadow border border-slate-200 */
+    #n8n-chat-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+    
     #n8n-chat-window {
       position: absolute;
       bottom: 76px;
@@ -144,25 +114,23 @@
       height: 500px;
       background: #ffffff;
       border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(94,118,144,0.2);
+      box-shadow: 0 12px 24px rgba(94, 118, 144, 0.2);
+      border: 1px solid #e2e8f0;
       display: none;
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid #e2e8f0;
     }
     
-    /* Header - pl-4 pr-3 py-3 flex items-center gap-2 */
     #n8n-chat-header {
-      background: #ffffff;
-      padding: 12px 16px 12px 16px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
     }
     
-    /* Header Left - flex-1 flex items-center gap-2 */
     #n8n-header-left {
       flex: 1;
       display: flex;
@@ -170,7 +138,6 @@
       gap: 8px;
     }
     
-    /* Chat Title - text-slate-950 text-sm font-semibold leading-6 */
     #n8n-chat-title {
       color: #0f172a;
       font-size: 14px;
@@ -178,48 +145,46 @@
       line-height: 24px;
     }
     
-    /* Status Dot - w-2 h-2 bg-green-500 rounded-full */
     #n8n-status-dot {
       width: 8px;
       height: 8px;
       background: #10b981;
-      border-radius: 9999px;
+      border-radius: 50%;
     }
     
-    /* Header Right - flex items-center gap-2 */
     #n8n-header-right {
       display: flex;
       align-items: center;
       gap: 8px;
     }
     
-    /* Theme Toggle - w-10 p-0.5 bg-slate-200 rounded-full */
     #n8n-theme-toggle {
       width: 40px;
       height: 20px;
       padding: 2px;
       background: #e2e8f0;
-      border-radius: 9999px;
       border: none;
-      cursor: pointer;
+      border-radius: 9999px;
       display: flex;
       align-items: center;
-      transition: background 0.2s ease;
+      cursor: pointer;
     }
     
-    /* Theme Circle - w-5 h-5 bg-white rounded-full */
     #n8n-theme-circle {
       width: 20px;
       height: 20px;
       background: #ffffff;
-      border-radius: 9999px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s ease;
     }
     
-    /* Close Button - w-8 h-8 px-2 py-[5px] rounded-lg */
+    #n8n-theme-circle svg {
+      width: 16px;
+      height: 16px;
+    }
+    
     #n8n-close-btn {
       width: 32px;
       height: 32px;
@@ -231,41 +196,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s ease;
+      transition: background 0.2s;
     }
     
     #n8n-close-btn:hover {
       background: #f1f5f9;
     }
     
-    /* Messages Wrapper - flex-1 flex */
+    #n8n-close-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    
     #n8n-messages-wrapper {
       flex: 1;
       display: flex;
       overflow: hidden;
     }
     
-    /* Messages Container - flex-1 p-3 bg-white overflow-y-auto */
     #n8n-messages {
       flex: 1;
       padding: 12px;
       background: #ffffff;
       overflow-y: auto;
-      position: relative;
     }
     
-    /* Scrollbar - p-1 bg-white flex flex-col gap-2 */
     #n8n-scrollbar {
       padding: 4px;
       background: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
       gap: 8px;
     }
     
-    /* Scrollbar Track - w-1.5 flex-1 bg-slate-200 rounded-full */
     #n8n-scrollbar-track {
       width: 6px;
       flex: 1;
@@ -273,20 +237,19 @@
       border-radius: 9999px;
     }
     
-    /* Terms Banner */
     #n8n-terms-banner {
-      background: #ffffff;
+      background: white;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 16px;
-      margin: 80px 0 20px 0;
+      margin: 20px 8px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     #n8n-terms-banner svg {
@@ -315,26 +278,20 @@
       display: none;
     }
     
-    /* Input Area - p-3 flex flex-col gap-3 */
     #n8n-input-area {
       padding: 12px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       gap: 12px;
       background: #ffffff;
     }
     
-    /* Input Container - w-full flex items-center gap-2 */
     #n8n-input-container {
-      width: 100%;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     
-    /* Input Wrapper - flex-1 h-10 p-2 bg-slate-100 rounded-lg border border-slate-200 flex items-center gap-2 */
     #n8n-input-wrapper {
       flex: 1;
       height: 40px;
@@ -345,10 +302,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      overflow: hidden;
     }
     
-    /* Message Input - flex-1 text-slate-500 text-sm bg-transparent */
     #n8n-message-input {
       flex: 1;
       border: none;
@@ -357,7 +312,6 @@
       color: #64748b;
       font-size: 14px;
       font-family: 'Poppins', sans-serif;
-      line-height: 24px;
     }
     
     #n8n-message-input::placeholder {
@@ -370,14 +324,12 @@
       box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
     }
     
-    /* Attachment Icon - w-4 h-4 text-slate-500 */
     #n8n-attachment-icon {
       width: 16px;
       height: 16px;
       flex-shrink: 0;
     }
     
-    /* Send Button - w-10 h-10 p-2 bg-sky-500 rounded-lg */
     #n8n-send-btn {
       width: 40px;
       height: 40px;
@@ -388,20 +340,22 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-center: center;
-      gap: 8px;
-      overflow: hidden;
-      transition: all 0.2s ease;
+      justify-content: center;
+      transition: transform 0.2s;
       flex-shrink: 0;
     }
     
     #n8n-send-btn:hover {
       transform: scale(1.05);
-      opacity: 0.9;
+    }
+    
+    #n8n-send-btn svg {
+      width: 16px;
+      height: 16px;
     }
     
     #n8n-typing {
-      padding: 8px 12px;
+      padding: 8px 16px;
       background: #ffffff;
       border-top: 1px solid #e2e8f0;
       display: none;
@@ -428,7 +382,6 @@
       text-decoration: underline;
     }
     
-    /* Messages */
     .n8n-message {
       margin-bottom: 12px;
       display: flex;
@@ -441,38 +394,36 @@
     .n8n-message-bubble {
       max-width: 80%;
       padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: 18px;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.4;
       word-wrap: break-word;
     }
     
     .n8n-message.user .n8n-message-bubble {
       background: ${CONFIG.primaryColor};
       color: white;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: 6px;
     }
     
     .n8n-message.bot .n8n-message-bubble {
       background: #f8fafc;
       color: #0f172a;
       border: 1px solid #e2e8f0;
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 6px;
     }
     
-    /* Markdown Styling */
     .n8n-message-bubble h1,
     .n8n-message-bubble h2,
     .n8n-message-bubble h3 {
       margin: 8px 0 4px 0;
       line-height: 1.2;
-      font-weight: 600;
     }
     
-    .n8n-message-bubble h1 { font-size: 18px; }
-    .n8n-message-bubble h2 { font-size: 16px; }
-    .n8n-message-bubble h3 { font-size: 14px; }
-    .n8n-message-bubble p { margin: 8px 0; }
+    .n8n-message-bubble h1 { font-size: 18px; font-weight: 600; }
+    .n8n-message-bubble h2 { font-size: 16px; font-weight: 600; }
+    .n8n-message-bubble h3 { font-size: 14px; font-weight: 600; }
+    .n8n-message-bubble p { margin: 8px 0; line-height: 1.4; }
     .n8n-message-bubble strong { font-weight: 600; }
     .n8n-message-bubble em { font-style: italic; }
     
@@ -480,7 +431,7 @@
       background: rgba(0,0,0,0.05);
       padding: 2px 4px;
       border-radius: 3px;
-      font-family: monospace;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 12px;
     }
     
@@ -528,6 +479,7 @@
     
     .n8n-message-bubble li {
       margin: 4px 0;
+      line-height: 1.4;
     }
     
     .n8n-message-bubble a {
@@ -557,7 +509,7 @@
     .n8n-typing-dots div {
       width: 4px;
       height: 4px;
-      background: #64748b;
+      background: #666;
       border-radius: 50%;
       animation: n8n-typing 1.4s infinite ease-in-out;
     }
@@ -570,10 +522,22 @@
       40% { transform: scale(1); opacity: 1; }
     }
     
-    #n8n-messages::-webkit-scrollbar { width: 6px; }
-    #n8n-messages::-webkit-scrollbar-track { background: transparent; }
-    #n8n-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
-    #n8n-messages::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    #n8n-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    #n8n-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    #n8n-messages::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 3px;
+    }
+    
+    #n8n-messages::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
+    }
     
     @media (max-width: 1200px) {
       #n8n-chat-window {
@@ -586,7 +550,10 @@
         height: 100vh !important;
         height: 100dvh !important;
         border-radius: 0 !important;
+        max-width: none !important;
+        max-height: none !important;
         border: none !important;
+        background: #f8f9fa !important;
       }
       
       #n8n-chat-header {
@@ -595,7 +562,8 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 1002 !important;
-        padding-top: calc(env(safe-area-inset-top) + 12px) !important;
+        padding-top: calc(env(safe-area-inset-top) + 16px) !important;
+        margin: 0 !important;
       }
       
       #n8n-input-area {
@@ -604,7 +572,9 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 1002 !important;
-        padding-bottom: 12px !important;
+        padding-bottom: 16px !important;
+        margin: 0 !important;
+        border-top: none !important;
       }
       
       #n8n-powered-by {
@@ -614,6 +584,8 @@
         right: 0 !important;
         z-index: 1002 !important;
         padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+        margin: 0 !important;
+        border-top: none !important;
       }
       
       #n8n-messages-wrapper {
@@ -636,24 +608,26 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 1001 !important;
+        margin: 0 !important;
+        border-top: none !important;
       }
     }
   `;
 
-  // Create widget HTML - FIGMA DESIGN
+  // ========== CREATE WIDGET HTML ==========
   function createWidget() {
     const widget = document.createElement('div');
     widget.id = 'n8n-chat-widget';
     
     widget.innerHTML = `
       <div id="n8n-chat-toggle">
-        <svg id="n8n-chat-icon" width="20" height="20" fill="${buttonIconColor}" viewBox="0 0 24 24">
+        <svg id="n8n-chat-icon" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1.33">
           <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-          <circle cx="9" cy="10" r="1" fill="${buttonIconColor}"/>
-          <circle cx="12" cy="10" r="1" fill="${buttonIconColor}"/>
-          <circle cx="15" cy="10" r="1" fill="${buttonIconColor}"/>
+          <circle cx="9" cy="10" r="1" fill="white"/>
+          <circle cx="12" cy="10" r="1" fill="white"/>
+          <circle cx="15" cy="10" r="1" fill="white"/>
         </svg>
-        <svg id="n8n-close-icon" width="20" height="20" fill="${buttonIconColor}" viewBox="0 0 24 24" style="display: none;">
+        <svg id="n8n-close-icon" fill="white" viewBox="0 0 24 24" style="display: none;">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
         </svg>
       </div>
@@ -661,13 +635,14 @@
       <div id="n8n-chat-window">
         <div id="n8n-chat-header">
           <div id="n8n-header-left">
-            <span id="n8n-chat-title">${CONFIG.chatTitle}</span>
+            <div id="n8n-chat-title">${CONFIG.chatTitle}</div>
             <div id="n8n-status-dot"></div>
           </div>
+          
           <div id="n8n-header-right">
             <button id="n8n-theme-toggle" type="button">
               <div id="n8n-theme-circle">
-                <svg width="16" height="16" fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
+                <svg fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
                   <circle cx="12" cy="12" r="5.5"/>
                   <line x1="12" y1="1" x2="12" y2="3"/>
                   <line x1="12" y1="21" x2="12" y2="23"/>
@@ -680,15 +655,16 @@
                 </svg>
               </div>
             </button>
+            
             <button id="n8n-close-btn" type="button">
-              <svg width="16" height="16" fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
+              <svg fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
                 <line x1="18" y1="6" x2="6" y2="18"/>
                 <line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
             </button>
           </div>
         </div>
-        
+
         <div id="n8n-messages-wrapper">
           <div id="n8n-messages">
             <div id="n8n-terms-banner">
@@ -698,11 +674,12 @@
               <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" rel="noopener noreferrer">${CONFIG.termsLinkText}</a></p>
             </div>
           </div>
+          
           <div id="n8n-scrollbar">
             <div id="n8n-scrollbar-track"></div>
           </div>
         </div>
-        
+
         <div id="n8n-input-area">
           <div id="n8n-input-container">
             <div id="n8n-input-wrapper">
@@ -711,8 +688,9 @@
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
               </svg>
             </div>
+            
             <button type="button" id="n8n-send-btn">
-              <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1.33">
+              <svg fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1.33">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>
             </button>
@@ -739,7 +717,7 @@
     return widget;
   }
 
-  // Widget functionality
+  // ========== WIDGET FUNCTIONALITY ==========
   function initWidget() {
     // Inject CSS
     const styleSheet = document.createElement('style');
@@ -790,7 +768,6 @@
     
     // Add message to chat with markdown support
     function addMessage(content, isUser = false) {
-      // Mark that we have messages and hide the banner
       if (!hasMessages) {
         hasMessages = true;
         messagesContainer.classList.add('has-messages');
@@ -803,10 +780,8 @@
       bubble.className = 'n8n-message-bubble';
       
       if (isUser) {
-        // User messages stay as plain text
         bubble.textContent = content;
       } else {
-        // Bot messages get markdown parsing
         bubble.innerHTML = parseMarkdown(content);
       }
       
@@ -931,7 +906,6 @@
       if (e.key === 'Enter') {
         e.preventDefault();
         console.log('Enter pressed');
-        // Blur the input first to close mobile keyboard
         messageInput.blur();
         setTimeout(() => {
           handleSendMessage();
@@ -948,22 +922,17 @@
 
     // WhatsApp link click tracking
     messagesContainer.addEventListener('click', function(e) {
-      // Check if the clicked element is a link or inside a link
       let target = e.target;
       
-      // Traverse up to find if we clicked on or inside an anchor tag
       while (target && target !== messagesContainer) {
         if (target.tagName === 'A') {
           const href = target.href;
           console.log('Link clicked:', href);
           
-          // Check if it's a wa.me link
           if (href && href.includes('wa.me/')) {
             console.log('WhatsApp link detected! Sending tracking...');
             whatsAppIsClicked = 'yes';
-            // Immediately send tracking to webhook
             sendWhatsAppClickTracking(href);
-            // Let the link open normally
           }
           break;
         }
