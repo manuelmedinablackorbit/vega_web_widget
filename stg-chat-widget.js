@@ -101,7 +101,7 @@
     return sanitize(html);
   }
 
-  // Create and inject CSS - UPDATED TO MATCH FIGMA
+  // Create and inject CSS - FIGMA DESIGN (Tailwind converted to CSS)
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -110,14 +110,15 @@
       bottom: 20px;
       right: 20px;
       z-index: 10000;
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
     
+    /* Toggle Button - bg-sky-500 rounded-full p-4 */
     #n8n-chat-toggle {
       width: 56px;
       height: 56px;
       background: ${CONFIG.primaryColor};
-      border-radius: 50%;
+      border-radius: 9999px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -126,6 +127,7 @@
       transition: all 0.3s ease;
       border: none;
       outline: none;
+      padding: 16px;
     }
     
     #n8n-chat-toggle:hover {
@@ -133,13 +135,14 @@
       box-shadow: 0 16px 32px rgba(94,118,144,0.3);
     }
     
+    /* Chat Window - w-80 h-[500px] bg-white rounded-2xl shadow border border-slate-200 */
     #n8n-chat-window {
       position: absolute;
       bottom: 76px;
       right: 0;
       width: 320px;
       height: 500px;
-      background: ${backgroundColor};
+      background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 12px 24px rgba(94,118,144,0.2);
       display: none;
@@ -148,95 +151,135 @@
       border: 1px solid #e2e8f0;
     }
     
+    /* Header - pl-4 pr-3 py-3 flex items-center gap-2 */
     #n8n-chat-header {
-      background: ${backgroundColor};
-      color: ${textColor};
-      padding: 12px 16px;
-      font-weight: 600;
-      font-size: 14px;
+      background: #ffffff;
+      padding: 12px 16px 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
-      z-index: 1001;
+      gap: 8px;
       border-bottom: 1px solid #e2e8f0;
     }
     
+    /* Header Left - flex-1 flex items-center gap-2 */
     #n8n-header-left {
+      flex: 1;
       display: flex;
       align-items: center;
       gap: 8px;
-      flex: 1;
     }
     
+    /* Chat Title - text-slate-950 text-sm font-semibold leading-6 */
+    #n8n-chat-title {
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 24px;
+    }
+    
+    /* Status Dot - w-2 h-2 bg-green-500 rounded-full */
     #n8n-status-dot {
       width: 8px;
       height: 8px;
       background: #10b981;
-      border-radius: 50%;
+      border-radius: 9999px;
     }
     
-    #n8n-header-actions {
+    /* Header Right - flex items-center gap-2 */
+    #n8n-header-right {
       display: flex;
       align-items: center;
       gap: 8px;
     }
     
+    /* Theme Toggle - w-10 p-0.5 bg-slate-200 rounded-full */
     #n8n-theme-toggle {
       width: 40px;
       height: 20px;
+      padding: 2px;
       background: #e2e8f0;
       border-radius: 9999px;
       border: none;
       cursor: pointer;
-      padding: 2px;
       display: flex;
       align-items: center;
+      transition: background 0.2s ease;
     }
     
+    /* Theme Circle - w-5 h-5 bg-white rounded-full */
     #n8n-theme-circle {
       width: 20px;
       height: 20px;
-      background: white;
-      border-radius: 50%;
+      background: #ffffff;
+      border-radius: 9999px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: transform 0.2s ease;
     }
     
+    /* Close Button - w-8 h-8 px-2 py-[5px] rounded-lg */
     #n8n-close-btn {
+      width: 32px;
+      height: 32px;
+      padding: 8px 8px 5px;
       background: none;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
-      padding: 8px 8px 5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
       transition: background 0.2s ease;
-      width: 32px;
-      height: 32px;
     }
     
     #n8n-close-btn:hover {
       background: #f1f5f9;
     }
     
+    /* Messages Wrapper - flex-1 flex */
+    #n8n-messages-wrapper {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    /* Messages Container - flex-1 p-3 bg-white overflow-y-auto */
     #n8n-messages {
       flex: 1;
-      overflow-y: auto;
       padding: 12px;
-      background: ${backgroundColor};
+      background: #ffffff;
+      overflow-y: auto;
       position: relative;
     }
     
-    /* Terms Banner Styles */
+    /* Scrollbar - p-1 bg-white flex flex-col gap-2 */
+    #n8n-scrollbar {
+      padding: 4px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    /* Scrollbar Track - w-1.5 flex-1 bg-slate-200 rounded-full */
+    #n8n-scrollbar-track {
+      width: 6px;
+      flex: 1;
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    
+    /* Terms Banner */
     #n8n-terms-banner {
-      background: white;
+      background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 16px;
-      margin: 80px 8px 20px 8px;
+      margin: 80px 0 20px 0;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -262,81 +305,92 @@
       color: ${CONFIG.primaryColor};
       text-decoration: none;
       font-weight: 500;
-      border-bottom: 1px solid transparent;
-      transition: border-bottom 0.2s ease;
     }
     
     #n8n-terms-banner a:hover {
-      border-bottom: 1px solid ${CONFIG.primaryColor};
+      text-decoration: underline;
     }
     
     #n8n-messages.has-messages #n8n-terms-banner {
       display: none;
     }
     
+    /* Input Area - p-3 flex flex-col gap-3 */
     #n8n-input-area {
       padding: 12px;
-      border-top: none;
-      background: ${backgroundColor};
-      position: relative;
-      z-index: 1001;
-    }
-    
-    #n8n-input-container {
       display: flex;
-      gap: 8px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
     }
     
-    #n8n-input-box {
-      flex: 1;
+    /* Input Container - w-full flex items-center gap-2 */
+    #n8n-input-container {
+      width: 100%;
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #f8fafc;
-      height: 40px;
     }
     
+    /* Input Wrapper - flex-1 h-10 p-2 bg-slate-100 rounded-lg border border-slate-200 flex items-center gap-2 */
+    #n8n-input-wrapper {
+      flex: 1;
+      height: 40px;
+      padding: 8px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+    }
+    
+    /* Message Input - flex-1 text-slate-500 text-sm bg-transparent */
     #n8n-message-input {
       flex: 1;
       border: none;
       outline: none;
-      font-size: 14px;
       background: transparent;
-      color: ${textColor};
+      color: #64748b;
+      font-size: 14px;
       font-family: 'Poppins', sans-serif;
-      -webkit-appearance: none;
+      line-height: 24px;
     }
     
     #n8n-message-input::placeholder {
       color: #94a3b8;
     }
     
-    #n8n-input-box:focus-within {
+    #n8n-input-wrapper:focus-within {
       border-color: ${CONFIG.primaryColor};
-      background: ${backgroundColor};
+      background: #ffffff;
       box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
     }
     
+    /* Attachment Icon - w-4 h-4 text-slate-500 */
     #n8n-attachment-icon {
       width: 16px;
       height: 16px;
-      color: #64748b;
       flex-shrink: 0;
     }
     
+    /* Send Button - w-10 h-10 p-2 bg-sky-500 rounded-lg */
     #n8n-send-btn {
+      width: 40px;
+      height: 40px;
+      padding: 8px;
       background: ${CONFIG.primaryColor};
       border: none;
       border-radius: 8px;
-      width: 40px;
-      height: 40px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-center: center;
+      gap: 8px;
+      overflow: hidden;
       transition: all 0.2s ease;
       flex-shrink: 0;
     }
@@ -347,8 +401,8 @@
     }
     
     #n8n-typing {
-      padding: 8px 16px;
-      background: ${backgroundColor};
+      padding: 8px 12px;
+      background: #ffffff;
       border-top: 1px solid #e2e8f0;
       display: none;
       font-size: 12px;
@@ -357,13 +411,11 @@
     
     #n8n-powered-by {
       padding: 8px 16px;
-      background: ${backgroundColor};
+      background: #ffffff;
       border-top: 1px solid #e2e8f0;
       text-align: center;
       font-size: 11px;
       color: #94a3b8;
-      position: relative;
-      z-index: 1001;
     }
     
     #n8n-powered-by a {
@@ -376,6 +428,7 @@
       text-decoration: underline;
     }
     
+    /* Messages */
     .n8n-message {
       margin-bottom: 12px;
       display: flex;
@@ -402,52 +455,32 @@
     
     .n8n-message.bot .n8n-message-bubble {
       background: #f8fafc;
-      color: ${textColor};
+      color: #0f172a;
       border: 1px solid #e2e8f0;
       border-bottom-left-radius: 4px;
     }
     
-    /* ========== MARKDOWN STYLING ========== */
+    /* Markdown Styling */
     .n8n-message-bubble h1,
     .n8n-message-bubble h2,
     .n8n-message-bubble h3 {
       margin: 8px 0 4px 0;
       line-height: 1.2;
-    }
-    
-    .n8n-message-bubble h1 {
-      font-size: 18px;
       font-weight: 600;
     }
     
-    .n8n-message-bubble h2 {
-      font-size: 16px;
-      font-weight: 600;
-    }
-    
-    .n8n-message-bubble h3 {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    
-    .n8n-message-bubble p {
-      margin: 8px 0;
-      line-height: 1.5;
-    }
-    
-    .n8n-message-bubble strong {
-      font-weight: 600;
-    }
-    
-    .n8n-message-bubble em {
-      font-style: italic;
-    }
+    .n8n-message-bubble h1 { font-size: 18px; }
+    .n8n-message-bubble h2 { font-size: 16px; }
+    .n8n-message-bubble h3 { font-size: 14px; }
+    .n8n-message-bubble p { margin: 8px 0; }
+    .n8n-message-bubble strong { font-weight: 600; }
+    .n8n-message-bubble em { font-style: italic; }
     
     .n8n-message-bubble code {
       background: rgba(0,0,0,0.05);
       padding: 2px 4px;
       border-radius: 3px;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-family: monospace;
       font-size: 12px;
     }
     
@@ -495,7 +528,6 @@
     
     .n8n-message-bubble li {
       margin: 4px 0;
-      line-height: 1.5;
     }
     
     .n8n-message-bubble a {
@@ -508,7 +540,6 @@
       opacity: 1;
     }
     
-    /* Image styling */
     .n8n-message-bubble img {
       max-width: 100%;
       height: auto;
@@ -539,22 +570,10 @@
       40% { transform: scale(1); opacity: 1; }
     }
     
-    #n8n-messages::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    #n8n-messages::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    #n8n-messages::-webkit-scrollbar-thumb {
-      background: #e2e8f0;
-      border-radius: 3px;
-    }
-    
-    #n8n-messages::-webkit-scrollbar-thumb:hover {
-      background: #cbd5e1;
-    }
+    #n8n-messages::-webkit-scrollbar { width: 6px; }
+    #n8n-messages::-webkit-scrollbar-track { background: transparent; }
+    #n8n-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+    #n8n-messages::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
     
     @media (max-width: 1200px) {
       #n8n-chat-window {
@@ -567,10 +586,7 @@
         height: 100vh !important;
         height: 100dvh !important;
         border-radius: 0 !important;
-        max-width: none !important;
-        max-height: none !important;
         border: none !important;
-        background: ${backgroundColor} !important;
       }
       
       #n8n-chat-header {
@@ -580,7 +596,6 @@
         right: 0 !important;
         z-index: 1002 !important;
         padding-top: calc(env(safe-area-inset-top) + 12px) !important;
-        margin: 0 !important;
       }
       
       #n8n-input-area {
@@ -590,8 +605,6 @@
         right: 0 !important;
         z-index: 1002 !important;
         padding-bottom: 12px !important;
-        margin: 0 !important;
-        border-top: none !important;
       }
       
       #n8n-powered-by {
@@ -601,21 +614,20 @@
         right: 0 !important;
         z-index: 1002 !important;
         padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
-        margin: 0 !important;
-        border-top: none !important;
       }
       
-      #n8n-messages {
+      #n8n-messages-wrapper {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
-        margin: 0 !important;
-        padding: calc(60px + env(safe-area-inset-top)) 16px calc(120px + env(safe-area-inset-bottom)) 16px !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        box-sizing: border-box !important;
+        padding-top: calc(60px + env(safe-area-inset-top)) !important;
+        padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
+      }
+      
+      #n8n-messages {
+        padding: 12px 16px !important;
       }
       
       #n8n-typing {
@@ -624,26 +636,24 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 1001 !important;
-        margin: 0 !important;
-        border-top: none !important;
       }
     }
   `;
 
-  // Create widget HTML - UPDATED TO MATCH FIGMA
+  // Create widget HTML - FIGMA DESIGN
   function createWidget() {
     const widget = document.createElement('div');
     widget.id = 'n8n-chat-widget';
     
     widget.innerHTML = `
       <div id="n8n-chat-toggle">
-        <svg id="n8n-chat-icon" width="24" height="24" fill="${buttonIconColor}" viewBox="0 0 24 24">
+        <svg id="n8n-chat-icon" width="20" height="20" fill="${buttonIconColor}" viewBox="0 0 24 24">
           <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
           <circle cx="9" cy="10" r="1" fill="${buttonIconColor}"/>
           <circle cx="12" cy="10" r="1" fill="${buttonIconColor}"/>
           <circle cx="15" cy="10" r="1" fill="${buttonIconColor}"/>
         </svg>
-        <svg id="n8n-close-icon" width="24" height="24" fill="${buttonIconColor}" viewBox="0 0 24 24" style="display: none;">
+        <svg id="n8n-close-icon" width="20" height="20" fill="${buttonIconColor}" viewBox="0 0 24 24" style="display: none;">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
         </svg>
       </div>
@@ -651,14 +661,14 @@
       <div id="n8n-chat-window">
         <div id="n8n-chat-header">
           <div id="n8n-header-left">
-            <span>${CONFIG.chatTitle}</span>
+            <span id="n8n-chat-title">${CONFIG.chatTitle}</span>
             <div id="n8n-status-dot"></div>
           </div>
-          <div id="n8n-header-actions">
+          <div id="n8n-header-right">
             <button id="n8n-theme-toggle" type="button">
               <div id="n8n-theme-circle">
                 <svg width="16" height="16" fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
-                  <circle cx="12" cy="12" r="5"/>
+                  <circle cx="12" cy="12" r="5.5"/>
                   <line x1="12" y1="1" x2="12" y2="3"/>
                   <line x1="12" y1="21" x2="12" y2="23"/>
                   <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
@@ -679,20 +689,25 @@
           </div>
         </div>
         
-        <div id="n8n-messages">
-          <div id="n8n-terms-banner">
-            <svg width="24" height="24" fill="${CONFIG.primaryColor}" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" rel="noopener noreferrer">${CONFIG.termsLinkText}</a></p>
+        <div id="n8n-messages-wrapper">
+          <div id="n8n-messages">
+            <div id="n8n-terms-banner">
+              <svg width="24" height="24" fill="${CONFIG.primaryColor}" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+              <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" rel="noopener noreferrer">${CONFIG.termsLinkText}</a></p>
+            </div>
+          </div>
+          <div id="n8n-scrollbar">
+            <div id="n8n-scrollbar-track"></div>
           </div>
         </div>
         
         <div id="n8n-input-area">
           <div id="n8n-input-container">
-            <div id="n8n-input-box">
+            <div id="n8n-input-wrapper">
               <input type="text" id="n8n-message-input" placeholder="${CONFIG.inputPlaceholder}" />
-              <svg id="n8n-attachment-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.33">
+              <svg id="n8n-attachment-icon" fill="none" stroke="#64748b" viewBox="0 0 24 24" stroke-width="1.33">
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
               </svg>
             </div>
