@@ -1,35 +1,27 @@
-(function() {
-  'use strict';
-  
-  console.log('TEST WIDGET: Iniciando...');
-  
-  // Crear el widget INMEDIATAMENTE sin esperar nada
-  function createWidget() {
-    console.log('TEST WIDGET: Creando widget...');
-    
-    const widget = document.createElement('div');
-    widget.id = 'test-widget';
-    
-    // Estilos inline para que funcione SIN Tailwind
-    widget.innerHTML = `
-      <div style="position: fixed; bottom: 20px; right: 20px; z-index: 99999;">
-        <div style="width: 60px; height: 60px; background: #0EA5E9; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; color: white; font-weight: bold; font-size: 24px;">
-          💬
-        </div>
-      </div>
-    `;
-    
-    document.body.appendChild(widget);
-    console.log('TEST WIDGET: Widget agregado al DOM!');
-  }
-  
-  // Ejecutar INMEDIATAMENTE
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createWidget);
-  } else {
-    createWidget();
-  }
-  
-  console.log('TEST WIDGET: Script cargado');
-  
-})();
+// Test super básico
+console.log('========================================');
+console.log('WIDGET TEST: El script se está ejecutando!');
+console.log('========================================');
+
+alert('WIDGET TEST: Si ves esta alerta, el script SÍ se cargó!');
+
+// Crear círculo visible
+var div = document.createElement('div');
+div.innerHTML = 'WIDGET AQUÍ';
+div.style.position = 'fixed';
+div.style.bottom = '20px';
+div.style.right = '20px';
+div.style.width = '100px';
+div.style.height = '100px';
+div.style.background = 'red';
+div.style.color = 'white';
+div.style.display = 'flex';
+div.style.alignItems = 'center';
+div.style.justifyContent = 'center';
+div.style.zIndex = '999999';
+div.style.fontSize = '12px';
+div.style.fontWeight = 'bold';
+
+document.body.appendChild(div);
+
+console.log('WIDGET TEST: Cuadrado rojo agregado!');
