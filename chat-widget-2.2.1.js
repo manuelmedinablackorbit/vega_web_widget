@@ -13,9 +13,7 @@
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
-    darkMode: userConfig.darkMode || false,
-    autoOpen: userConfig.autoOpen || false,
-    autoOpenMobile: userConfig.autoOpenMobile || false
+    darkMode: userConfig.darkMode || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -785,27 +783,6 @@
     });
     
     console.log('BlackOrbit Widget: Listo!', SESSION_ID);
-    
-    // Auto-open logic
-    const hasHover = window.matchMedia('(hover: hover)').matches;
-    const isMobileDevice = !hasHover; // Mobile = no hover (touch only)
-    
-    // Check if should auto-open based on device type
-    if (CONFIG.autoOpen && !isMobileDevice) {
-      // Desktop auto-open (original logic)
-      isOpen = true;
-      window.classList.add('open');
-      chatIcon.style.display = 'none';
-      closeIcon.style.display = 'block';
-      console.log('BlackOrbit: Auto-opened - Desktop (autoOpen: true)');
-    } else if (CONFIG.autoOpenMobile && isMobileDevice) {
-      // Mobile auto-open (new logic)
-      isOpen = true;
-      window.classList.add('open');
-      chatIcon.style.display = 'none';
-      closeIcon.style.display = 'block';
-      console.log('BlackOrbit: Auto-opened - Mobile (autoOpenMobile: true)');
-    }
   }
 
   if (document.readyState === 'loading') {
