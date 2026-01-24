@@ -107,8 +107,8 @@
         /* CHAT WINDOW */
         .bo-window {
           position: fixed;
-          bottom: 82px;
-          right: 20px;
+          bottom: 96px;
+          right: 40px;
           width: 320px;
           height: 500px;
           background: white;
