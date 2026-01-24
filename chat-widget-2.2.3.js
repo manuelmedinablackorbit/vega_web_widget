@@ -402,7 +402,27 @@
         .bo-bubble li { margin: 4px 0; }
         .bo-bubble a { text-decoration: underline; opacity: 0.8; }
         .bo-bubble a:hover { opacity: 1; }
-        .bo-bubble img { max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0; }
+        .bo-bubble img { 
+          max-width: 100%; 
+          height: auto; 
+          border-radius: 8px; 
+          margin: 8px 0; 
+          padding: 8px;
+          background: white;
+          border: 1px solid #E1E8F2;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: block;
+        }
+        .bo-bubble img:hover {
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          transform: translateY(-2px);
+        }
+        .bo-window.dark .bo-bubble img {
+          background: #18293F;
+          border-color: #2E425A;
+        }
         
         /* SCROLLBAR */
         .bo-messages::-webkit-scrollbar { width: 6px; }
@@ -417,6 +437,55 @@
         }
         .bo-messages::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
         .bo-window.dark .bo-messages::-webkit-scrollbar-thumb:hover { background: #2E425A; }
+        
+        /* IMAGE MODAL */
+        .bo-image-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.85);
+          z-index: 100000;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+        }
+        .bo-image-modal.open {
+          display: flex;
+        }
+        .bo-image-modal-content {
+          max-width: 90%;
+          max-height: 90vh;
+          object-fit: contain;
+          border-radius: 8px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .bo-image-modal-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 40px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.9);
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .bo-image-modal-close:hover {
+          background: white;
+          transform: scale(1.1);
+        }
+        .bo-image-modal-close svg {
+          width: 20px;
+          height: 20px;
+        }
         
         /* TYPING */
         .bo-typing {
@@ -617,6 +686,16 @@
           Escribiendo...
         </div>
       </div>
+      
+      <!-- IMAGE MODAL -->
+      <div class="bo-image-modal" id="bo-image-modal">
+        <button class="bo-image-modal-close" id="bo-image-modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <img class="bo-image-modal-content" id="bo-image-modal-img" src="" alt="">
+      </div>
     `;
     
     return widget;
@@ -637,6 +716,9 @@
     const chatIcon = document.getElementById('bo-icon-chat');
     const closeIcon = document.getElementById('bo-icon-close');
     const themeToggle = document.getElementById('bo-theme-toggle');
+    const imageModal = document.getElementById('bo-image-modal');
+    const imageModalImg = document.getElementById('bo-image-modal-img');
+    const imageModalClose = document.getElementById('bo-image-modal-close');
     
     let isOpen = false;
     let hasMessages = false;
@@ -767,6 +849,15 @@
     
     messages.addEventListener('click', (e) => {
       let target = e.target;
+      
+      // Check if clicked on image
+      if (target.tagName === 'IMG' && target.closest('.bo-bubble')) {
+        imageModalImg.src = target.src;
+        imageModal.classList.add('open');
+        return;
+      }
+      
+      // Check for WhatsApp links
       while (target && target !== messages) {
         if (target.tagName === 'A' && target.href && target.href.includes('wa.me/')) {
           whatsAppClicked = 'yes';
@@ -774,6 +865,18 @@
           break;
         }
         target = target.parentElement;
+      }
+    });
+    
+    // Close image modal
+    imageModalClose.addEventListener('click', () => {
+      imageModal.classList.remove('open');
+    });
+    
+    // Close modal when clicking background
+    imageModal.addEventListener('click', (e) => {
+      if (e.target === imageModal) {
+        imageModal.classList.remove('open');
       }
     });
     
