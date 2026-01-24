@@ -12,7 +12,8 @@
     inputPlaceholder: userConfig.inputPlaceholder || 'Escribe tu mensaje...',
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
-    termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/'
+    termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
+    darkMode: userConfig.darkMode || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -117,8 +118,16 @@
           display: none;
           flex-direction: column;
           overflow: hidden;
+          transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
         .bo-window.open { display: flex; }
+        
+        /* DARK MODE */
+        .bo-window.dark {
+          background: #010618;
+          border-color: #18293F;
+          box-shadow: 0 12px 24px rgba(11,23,45,0.2);
+        }
         
         /* HEADER */
         .bo-header {
@@ -129,6 +138,10 @@
           gap: 8px;
           display: flex;
           border-bottom: 1px solid #E1E8F2;
+          transition: border-color 0.3s;
+        }
+        .bo-window.dark .bo-header {
+          border-bottom-color: #18293F;
         }
         .bo-header-left {
           flex: 1;
@@ -142,6 +155,10 @@
           font-size: 14px;
           font-weight: 600;
           line-height: 24px;
+          transition: color 0.3s;
+        }
+        .bo-window.dark .bo-title {
+          color: #F9FAFC;
         }
         .bo-status {
           width: 8px;
@@ -165,6 +182,11 @@
           justify-content: flex-start;
           align-items: center;
           gap: 8px;
+          transition: background 0.3s, justify-content 0.3s;
+        }
+        .bo-window.dark .bo-theme-toggle {
+          background: #18293F;
+          justify-content: flex-end;
         }
         .bo-theme-circle {
           width: 20px;
@@ -174,10 +196,26 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-theme-circle {
+          background: #010618;
         }
         .bo-theme-icon {
           width: 16px;
           height: 16px;
+        }
+        .bo-theme-icon-sun {
+          display: block;
+        }
+        .bo-theme-icon-moon {
+          display: none;
+        }
+        .bo-window.dark .bo-theme-icon-sun {
+          display: none;
+        }
+        .bo-window.dark .bo-theme-icon-moon {
+          display: block;
         }
         .bo-close-btn {
           width: 32px;
@@ -206,6 +244,10 @@
           padding: 12px;
           background: white;
           overflow-y: auto;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-messages {
+          background: #010618;
         }
         
         /* TERMS BANNER */
@@ -256,6 +298,11 @@
           align-items: center;
           gap: 8px;
           display: flex;
+          transition: background 0.3s, border-color 0.3s;
+        }
+        .bo-window.dark .bo-input-wrapper {
+          background: #18293F;
+          border-color: #2E425A;
         }
         .bo-input {
           flex: 1;
@@ -267,11 +314,17 @@
           font-family: 'Poppins';
           font-weight: 400;
           line-height: 24px;
+          transition: color 0.3s;
         }
-        .bo-input::placeholder { color: #5E7690; }
+        .bo-input::placeholder { 
+          color: #5E7690;
+          transition: color 0.3s;
+        }
         .bo-input-wrapper:focus-within {
           border-color: ${CONFIG.primaryColor};
-          background: white;
+        }
+        .bo-window.dark .bo-input-wrapper:focus-within {
+          background: #18293F;
         }
         .bo-attach-icon {
           width: 16px;
@@ -319,6 +372,12 @@
           color: #010618;
           border: 1px solid #E1E8F2;
           border-bottom-left-radius: 4px;
+          transition: background 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .bo-window.dark .bo-message.bot .bo-bubble {
+          background: #18293F;
+          border-color: #2E425A;
+          color: #F9FAFC;
         }
         
         /* MARKDOWN */
@@ -353,8 +412,16 @@
         /* SCROLLBAR */
         .bo-messages::-webkit-scrollbar { width: 6px; }
         .bo-messages::-webkit-scrollbar-track { background: transparent; }
-        .bo-messages::-webkit-scrollbar-thumb { background: #E1E8F2; border-radius: 3px; }
+        .bo-messages::-webkit-scrollbar-thumb { 
+          background: #E1E8F2; 
+          border-radius: 3px;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-messages::-webkit-scrollbar-thumb { 
+          background: #18293F; 
+        }
         .bo-messages::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        .bo-window.dark .bo-messages::-webkit-scrollbar-thumb:hover { background: #2E425A; }
         
         /* TYPING */
         .bo-typing {
@@ -414,9 +481,10 @@
             <div class="bo-status"></div>
           </div>
           <div class="bo-header-right">
-            <button class="bo-theme-toggle">
+            <button class="bo-theme-toggle" id="bo-theme-toggle">
               <div class="bo-theme-circle">
-                <svg class="bo-theme-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <!-- Sun Icon -->
+                <svg class="bo-theme-icon bo-theme-icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <g clip-path="url(#clip0_502_570)">
                     <path d="M8.00001 10.6666C9.47277 10.6666 10.6667 9.47268 10.6667 7.99992C10.6667 6.52716 9.47277 5.33325 8.00001 5.33325C6.52725 5.33325 5.33334 6.52716 5.33334 7.99992C5.33334 9.47268 6.52725 10.6666 8.00001 10.6666Z" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M8 1.33325V2.66659" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -433,6 +501,12 @@
                       <rect width="16" height="16" fill="white"/>
                     </clipPath>
                   </defs>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="bo-theme-icon bo-theme-icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M12 3.33325H14.6667" stroke="#40576E" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M13.3334 2V4.66667" stroke="#40576E" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M13.9901 8.32394C13.9276 9.48137 13.5312 10.5959 12.8488 11.5329C12.1664 12.4698 11.2272 13.1891 10.1447 13.6036C9.0623 14.0182 7.88294 14.1104 6.74924 13.869C5.61554 13.6276 4.57603 13.063 3.75636 12.2434C2.9367 11.4238 2.37198 10.3844 2.13047 9.25068C1.88895 8.117 1.98099 6.93764 2.39544 5.85515C2.8099 4.77266 3.52903 3.8334 4.46591 3.1509C5.40279 2.4684 6.5173 2.07188 7.67472 2.00927C7.94472 1.99461 8.08606 2.31594 7.94272 2.54461C7.46332 3.31164 7.25804 4.21852 7.36039 5.11724C7.46274 6.01596 7.86667 6.85346 8.50627 7.49306C9.14587 8.13266 9.98337 8.53659 10.8821 8.63894C11.7808 8.74129 12.6877 8.53601 13.4547 8.05661C13.6841 7.91327 14.0047 8.05394 13.9901 8.32394Z" stroke="#40576E" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
             </button>
@@ -505,10 +579,26 @@
     const typing = document.getElementById('bo-typing');
     const chatIcon = document.getElementById('bo-icon-chat');
     const closeIcon = document.getElementById('bo-icon-close');
+    const themeToggle = document.getElementById('bo-theme-toggle');
     
     let isOpen = false;
     let hasMessages = false;
     let whatsAppClicked = 'no';
+    let isDark = CONFIG.darkMode;
+    
+    // Apply dark mode on init if enabled
+    if (isDark) {
+      window.classList.add('dark');
+    }
+    
+    function toggleDarkMode() {
+      isDark = !isDark;
+      if (isDark) {
+        window.classList.add('dark');
+      } else {
+        window.classList.remove('dark');
+      }
+    }
     
     function toggleChat() {
       isOpen = !isOpen;
@@ -609,6 +699,7 @@
     
     toggle.addEventListener('click', toggleChat);
     close.addEventListener('click', toggleChat);
+    themeToggle.addEventListener('click', toggleDarkMode);
     send.addEventListener('click', handleSend);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
