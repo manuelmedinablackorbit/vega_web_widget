@@ -1,66 +1,35 @@
 (function() {
   'use strict';
   
-  console.log('BlackOrbit Widget: Starting...');
+  console.log('TEST WIDGET: Iniciando...');
   
-  // ========== LOAD TAILWIND ==========
-  function loadTailwind() {
-    if (!document.querySelector('script[src*="tailwindcss"]')) {
-      console.log('BlackOrbit Widget: Loading Tailwind...');
-      const script = document.createElement('script');
-      script.src = 'https://cdn.tailwindcss.com';
-      script.onload = function() {
-        console.log('BlackOrbit Widget: Tailwind loaded!');
-      };
-      document.head.appendChild(script);
-    } else {
-      console.log('BlackOrbit Widget: Tailwind already loaded');
-    }
-  }
-  
-  // ========== CREATE SIMPLE WIDGET ==========
+  // Crear el widget INMEDIATAMENTE sin esperar nada
   function createWidget() {
-    console.log('BlackOrbit Widget: Creating widget...');
+    console.log('TEST WIDGET: Creando widget...');
     
     const widget = document.createElement('div');
-    widget.id = 'blackorbit-test-widget';
+    widget.id = 'test-widget';
     
-    // Solo el botón flotante con el ícono exacto de Figma
+    // Estilos inline para que funcione SIN Tailwind
     widget.innerHTML = `
-      <div class="fixed bottom-5 right-5 z-[99999]">
-        <div class="p-4 bg-sky-500 rounded-full shadow-[0px_12px_24px_0px_rgba(94,118,144,0.20)] inline-flex justify-center items-center gap-2 overflow-hidden cursor-pointer hover:scale-105 transition-transform">
-          <div class="w-4 h-4 relative overflow-hidden">
-            <div class="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute outline outline-[1.33px] outline-offset-[-0.67px] outline-white"></div>
-            <div class="w-[0.01px] h-0 left-[5.33px] top-[8px] absolute outline outline-[1.33px] outline-offset-[-0.67px] outline-white"></div>
-            <div class="w-[0.01px] h-0 left-[8px] top-[8px] absolute outline outline-[1.33px] outline-offset-[-0.67px] outline-white"></div>
-            <div class="w-[0.01px] h-0 left-[10.67px] top-[8px] absolute outline outline-[1.33px] outline-offset-[-0.67px] outline-white"></div>
-          </div>
+      <div style="position: fixed; bottom: 20px; right: 20px; z-index: 99999;">
+        <div style="width: 60px; height: 60px; background: #0EA5E9; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; color: white; font-weight: bold; font-size: 24px;">
+          💬
         </div>
       </div>
     `;
     
-    return widget;
+    document.body.appendChild(widget);
+    console.log('TEST WIDGET: Widget agregado al DOM!');
   }
   
-  // ========== INIT ==========
-  function init() {
-    console.log('BlackOrbit Widget: Initializing...');
-    
-    loadTailwind();
-    
-    // Esperar a que Tailwind cargue
-    setTimeout(() => {
-      const widget = createWidget();
-      document.body.appendChild(widget);
-      console.log('BlackOrbit Widget: Widget added to page!');
-    }, 500);
-  }
-  
-  // Start when DOM is ready
+  // Ejecutar INMEDIATAMENTE
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', createWidget);
   } else {
-    init();
+    createWidget();
   }
+  
+  console.log('TEST WIDGET: Script cargado');
   
 })();
