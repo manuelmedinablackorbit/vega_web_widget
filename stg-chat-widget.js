@@ -212,23 +212,6 @@
           background: white;
           overflow-y: auto;
         }
-        .bo-scrollbar-area {
-          align-self: stretch;
-          padding: 4px;
-          background: white;
-          overflow: hidden;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 8px;
-          display: inline-flex;
-        }
-        .bo-scrollbar-track {
-          width: 6px;
-          flex: 1;
-          background: #E1E8F2;
-          border-radius: 9999px;
-        }
         
         /* TERMS BANNER */
         .bo-terms {
@@ -413,11 +396,18 @@
 
       <!-- TOGGLE BUTTON -->
       <button class="bo-toggle" id="bo-toggle">
-        <svg id="bo-icon-chat" width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="9" cy="10" r="1" fill="white"/>
-          <circle cx="12" cy="10" r="1" fill="white"/>
-          <circle cx="15" cy="10" r="1" fill="white"/>
+        <svg id="bo-icon-chat" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <g clip-path="url(#clip0_502_594)">
+            <path d="M1.99465 10.8946C2.09268 11.1419 2.1145 11.4128 2.05732 11.6726L1.34732 13.866C1.32444 13.9772 1.33036 14.0924 1.3645 14.2007C1.39865 14.309 1.4599 14.4068 1.54243 14.4848C1.62497 14.5628 1.72606 14.6184 1.83612 14.6464C1.94618 14.6744 2.06156 14.6738 2.17132 14.6446L4.44665 13.9793C4.6918 13.9307 4.94567 13.9519 5.17932 14.0406C6.60291 14.7054 8.21557 14.8461 9.73275 14.4378C11.2499 14.0295 12.5742 13.0984 13.4718 11.8089C14.3694 10.5193 14.7827 8.95423 14.6389 7.38966C14.495 5.82509 13.8031 4.3616 12.6854 3.25742C11.5676 2.15324 10.0958 1.47932 8.52958 1.35456C6.96336 1.2298 5.40341 1.66221 4.12495 2.57552C2.84649 3.48882 1.93167 4.82432 1.54192 6.34638C1.15216 7.86845 1.3125 9.47926 1.99465 10.8946Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.33334 8H5.34001" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 8H8.00667" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.6667 8H10.6733" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <defs>
+            <clipPath id="clip0_502_594">
+              <rect width="16" height="16" fill="white"/>
+            </clipPath>
+          </defs>
         </svg>
         <svg id="bo-icon-close" width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:none;">
           <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -435,22 +425,30 @@
           <div class="bo-header-right">
             <button class="bo-theme-toggle">
               <div class="bo-theme-circle">
-                <svg class="bo-theme-icon" fill="none" stroke="#8CA3BB" viewBox="0 0 24 24" stroke-width="1.33">
-                  <circle cx="12" cy="12" r="5.33"/>
-                  <line x1="12" y1="1" x2="12" y2="3"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                  <line x1="1" y1="12" x2="3" y2="12"/>
-                  <line x1="21" y1="12" x2="23" y2="12"/>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                <svg class="bo-theme-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <g clip-path="url(#clip0_502_570)">
+                    <path d="M8.00001 10.6666C9.47277 10.6666 10.6667 9.47268 10.6667 7.99992C10.6667 6.52716 9.47277 5.33325 8.00001 5.33325C6.52725 5.33325 5.33334 6.52716 5.33334 7.99992C5.33334 9.47268 6.52725 10.6666 8.00001 10.6666Z" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 1.33325V2.66659" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 13.3333V14.6666" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.28665 3.28662L4.22665 4.22662" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M11.7733 11.7734L12.7133 12.7134" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1.33334 8H2.66668" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.3333 8H14.6667" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4.22665 11.7734L3.28665 12.7134" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.7133 3.28662L11.7733 4.22662" stroke="#8CA3BB" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_502_570">
+                      <rect width="16" height="16" fill="white"/>
+                    </clipPath>
+                  </defs>
                 </svg>
               </div>
             </button>
             <button class="bo-close-btn" id="bo-close">
-              <svg width="16" height="16" fill="none" stroke="#5E7690" viewBox="0 0 24 24" stroke-width="1.33">
-                <path d="M18 6L6 18M6 6l12 12"/>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12" stroke="#5E7690" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 4L12 12" stroke="#5E7690" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
           </div>
@@ -463,9 +461,6 @@
               <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank">${CONFIG.termsLinkText}</a></p>
             </div>
           </div>
-          <div class="bo-scrollbar-area">
-            <div class="bo-scrollbar-track"></div>
-          </div>
         </div>
 
         <!-- INPUT -->
@@ -475,8 +470,16 @@
               <input type="text" class="bo-input" id="bo-input" placeholder="${CONFIG.inputPlaceholder}">
             </div>
             <button class="bo-send-btn" id="bo-send">
-              <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1.33">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <g clip-path="url(#clip0_502_517)">
+                  <path d="M9.69067 14.4575C9.716 14.5206 9.76003 14.5744 9.81685 14.6118C9.87368 14.6492 9.94057 14.6683 10.0086 14.6665C10.0766 14.6648 10.1424 14.6423 10.1972 14.6021C10.2521 14.5618 10.2933 14.5058 10.3153 14.4415L14.6487 1.77479C14.67 1.71571 14.6741 1.65179 14.6604 1.59049C14.6467 1.52919 14.6159 1.47305 14.5715 1.42864C14.5271 1.38423 14.4709 1.35338 14.4096 1.33971C14.3483 1.32604 14.2844 1.33012 14.2253 1.35145L1.55867 5.68479C1.49433 5.70685 1.43829 5.74806 1.39805 5.8029C1.35781 5.85774 1.33532 5.92357 1.33357 5.99156C1.33183 6.05955 1.35093 6.12645 1.38831 6.18327C1.42568 6.24009 1.47955 6.28412 1.54267 6.30945L6.82934 8.42945C6.99646 8.49636 7.1483 8.59643 7.27571 8.72361C7.40312 8.85079 7.50346 9.00245 7.57067 9.16945L9.69067 14.4575Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14.5693 1.4314L7.276 8.72406" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_502_517">
+                    <rect width="16" height="16" fill="white"/>
+                  </clipPath>
+                </defs>
               </svg>
             </button>
           </div>
