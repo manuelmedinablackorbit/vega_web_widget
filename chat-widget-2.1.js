@@ -13,7 +13,9 @@
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
-    darkMode: userConfig.darkMode || false
+    darkMode: userConfig.darkMode || false,
+    autoOpenDesktop: userConfig.autoOpenDesktop || false,
+    autoOpenMobile: userConfig.autoOpenMobile || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -652,6 +654,21 @@
     if (isDark) {
       window.classList.add('dark');
     }
+    
+    // Auto-open based on screen size
+    function checkAutoOpen() {
+      const screenWidth = window.innerWidth;
+      const isMobile = screenWidth < 1200;
+      
+      if (isMobile && CONFIG.autoOpenMobile) {
+        toggleChat();
+      } else if (!isMobile && CONFIG.autoOpenDesktop) {
+        toggleChat();
+      }
+    }
+    
+    // Check auto-open on init
+    checkAutoOpen();
     
     function toggleDarkMode() {
       isDark = !isDark;
