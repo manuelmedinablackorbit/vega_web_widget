@@ -432,6 +432,10 @@
           font-size: 12px;
           color: #5E7690;
         }
+        .bo-window.dark .bo-typing {
+          background: #010618;
+          border-top-color: #18293F;
+        }
         .bo-typing-dots {
           display: inline-flex;
           gap: 2px;
@@ -449,6 +453,64 @@
         @keyframes bo-typing {
           0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
           40% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* MOBILE FULLSCREEN */
+        @media (max-width: 1200px) {
+          .bo-window {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+          
+          .bo-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+          }
+          .bo-window.dark .bo-header {
+            background: #010618;
+          }
+          
+          .bo-messages-wrapper {
+            position: fixed;
+            top: 49px;
+            left: 0;
+            right: 0;
+            bottom: 64px;
+            padding-top: 0;
+          }
+          
+          .bo-input-area {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+          }
+          .bo-window.dark .bo-input-area {
+            background: #010618;
+          }
+          
+          .bo-typing {
+            position: fixed;
+            bottom: 64px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+          }
         }
       </style>
 
