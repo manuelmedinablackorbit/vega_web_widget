@@ -137,11 +137,6 @@
           align-items: center;
           gap: 8px;
           display: flex;
-          border-bottom: 1px solid #E1E8F2;
-          transition: border-color 0.3s;
-        }
-        .bo-window.dark .bo-header {
-          border-bottom-color: #18293F;
         }
         .bo-header-left {
           flex: 1;
