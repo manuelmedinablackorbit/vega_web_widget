@@ -786,19 +786,25 @@
     
     console.log('BlackOrbit Widget: Listo!', SESSION_ID);
     
-    // Auto-open based on device type (hover detection)
+    // Auto-open logic
     const hasHover = window.matchMedia('(hover: hover)').matches;
-    const isDesktop = hasHover; // Desktop = has hover capability
-    const isMobile = !hasHover; // Mobile = no hover (touch only)
+    const isMobileDevice = !hasHover; // Mobile = no hover (touch only)
     
-    const shouldOpen = (isDesktop && CONFIG.autoOpen) || (isMobile && CONFIG.autoOpenMobile);
-    
-    if (shouldOpen) {
+    // Check if should auto-open based on device type
+    if (CONFIG.autoOpen && !isMobileDevice) {
+      // Desktop auto-open (original logic)
       isOpen = true;
       window.classList.add('open');
       chatIcon.style.display = 'none';
       closeIcon.style.display = 'block';
-      console.log('BlackOrbit: Auto-opened -', isDesktop ? 'Desktop (hover: hover)' : 'Mobile (hover: none)');
+      console.log('BlackOrbit: Auto-opened - Desktop (autoOpen: true)');
+    } else if (CONFIG.autoOpenMobile && isMobileDevice) {
+      // Mobile auto-open (new logic)
+      isOpen = true;
+      window.classList.add('open');
+      chatIcon.style.display = 'none';
+      closeIcon.style.display = 'block';
+      console.log('BlackOrbit: Auto-opened - Mobile (autoOpenMobile: true)');
     }
   }
 
