@@ -13,7 +13,8 @@
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
-    darkMode: userConfig.darkMode || false
+    darkMode: userConfig.darkMode || false,
+    autoOpen: userConfig.autoOpen || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -783,6 +784,15 @@
     });
     
     console.log('BlackOrbit Widget: Listo!', SESSION_ID);
+    
+    // Auto-open if configured
+    if (CONFIG.autoOpen) {
+      isOpen = true;
+      window.classList.add('open');
+      chatIcon.style.display = 'none';
+      closeIcon.style.display = 'block';
+      console.log('BlackOrbit: Auto-opened (autoOpen: true)');
+    }
   }
 
   if (document.readyState === 'loading') {
