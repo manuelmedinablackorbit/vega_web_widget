@@ -657,8 +657,7 @@
     
     // Auto-open based on screen size
     function checkAutoOpen() {
-      const screenWidth = window.innerWidth;
-      const isMobile = screenWidth < 1200;
+      const isMobile = window.matchMedia('(max-width: 1200px)').matches;
       
       if (isMobile && CONFIG.autoOpenMobile) {
         toggleChat();
