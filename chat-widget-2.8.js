@@ -788,16 +788,28 @@
     
     // Auto-open check - runs AFTER everything is initialized
     setTimeout(() => {
+      console.log('=== AUTO-OPEN DEBUG ===');
+      console.log('CONFIG.autoOpenDesktop:', CONFIG.autoOpenDesktop);
+      console.log('CONFIG.autoOpenMobile:', CONFIG.autoOpenMobile);
+      console.log('window.innerWidth:', window.innerWidth);
+      
       const isMobile = window.matchMedia('(max-width: 1200px)').matches;
+      console.log('isMobile (< 1200px):', isMobile);
+      
       const shouldOpen = (isMobile && CONFIG.autoOpenMobile) || (!isMobile && CONFIG.autoOpenDesktop);
+      console.log('shouldOpen:', shouldOpen);
+      console.log('isOpen:', isOpen);
       
       if (shouldOpen && !isOpen) {
-        console.log('BlackOrbit: Auto-opening...', isMobile ? 'mobile' : 'desktop');
+        console.log('✅ BlackOrbit: Auto-opening...', isMobile ? 'mobile' : 'desktop');
         window.classList.add('open');
         chatIcon.style.display = 'none';
         closeIcon.style.display = 'block';
         isOpen = true;
+      } else {
+        console.log('❌ NOT opening - shouldOpen:', shouldOpen, 'isOpen:', isOpen);
       }
+      console.log('===================');
     }, 100);
   }
 
