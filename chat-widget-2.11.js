@@ -14,7 +14,8 @@
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
     darkMode: userConfig.darkMode || false,
-    autoOpen: userConfig.autoOpen || false
+    autoOpen: userConfig.autoOpen || false,
+    autoOpenMobile: userConfig.autoOpenMobile || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -785,13 +786,19 @@
     
     console.log('BlackOrbit Widget: Listo!', SESSION_ID);
     
-    // Auto-open if configured
-    if (CONFIG.autoOpen) {
+    // Auto-open based on device type (hover detection)
+    const hasHover = window.matchMedia('(hover: hover)').matches;
+    const isDesktop = hasHover; // Desktop = has hover capability
+    const isMobile = !hasHover; // Mobile = no hover (touch only)
+    
+    const shouldOpen = (isDesktop && CONFIG.autoOpen) || (isMobile && CONFIG.autoOpenMobile);
+    
+    if (shouldOpen) {
       isOpen = true;
       window.classList.add('open');
       chatIcon.style.display = 'none';
       closeIcon.style.display = 'block';
-      console.log('BlackOrbit: Auto-opened (autoOpen: true)');
+      console.log('BlackOrbit: Auto-opened -', isDesktop ? 'Desktop (hover: hover)' : 'Mobile (hover: none)');
     }
   }
 
