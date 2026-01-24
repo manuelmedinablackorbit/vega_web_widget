@@ -784,24 +784,22 @@
       }
     });
     
-    // Auto-open based on screen size - called LAST after everything is set up
-    function checkAutoOpen() {
+    console.log('BlackOrbit Widget: Listo!', SESSION_ID);
+    
+    // Auto-open check - runs AFTER everything is initialized
+    setTimeout(() => {
       const isMobile = window.matchMedia('(max-width: 1200px)').matches;
+      const shouldOpen = (isMobile && CONFIG.autoOpenMobile) || (!isMobile && CONFIG.autoOpenDesktop);
       
-      if ((isMobile && CONFIG.autoOpenMobile) || (!isMobile && CONFIG.autoOpenDesktop)) {
-        // Directly open without toggling
-        isOpen = true;
+      if (shouldOpen && !isOpen) {
+        console.log('BlackOrbit: Auto-opening...', isMobile ? 'mobile' : 'desktop');
         window.classList.add('open');
         chatIcon.style.display = 'none';
         closeIcon.style.display = 'block';
-        setTimeout(() => input.focus(), 100);
+        isOpen = true;
       }
-    }
-    
-    // Check auto-open on init
-    checkAutoOpen();
-    
-    console.log('BlackOrbit Widget: Listo!', SESSION_ID);
+    }, 100);
+  }
   }
 
   if (document.readyState === 'loading') {
