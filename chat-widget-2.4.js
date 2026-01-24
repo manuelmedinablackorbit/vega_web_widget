@@ -655,20 +655,6 @@
       window.classList.add('dark');
     }
     
-    // Auto-open based on screen size
-    function checkAutoOpen() {
-      const isMobile = window.matchMedia('(max-width: 1200px)').matches;
-      
-      if (isMobile && CONFIG.autoOpenMobile) {
-        toggleChat();
-      } else if (!isMobile && CONFIG.autoOpenDesktop) {
-        toggleChat();
-      }
-    }
-    
-    // Check auto-open on init
-    checkAutoOpen();
-    
     function toggleDarkMode() {
       isDark = !isDark;
       if (isDark) {
@@ -797,6 +783,20 @@
         target = target.parentElement;
       }
     });
+    
+    // Auto-open based on screen size - called LAST after everything is set up
+    function checkAutoOpen() {
+      const isMobile = window.matchMedia('(max-width: 1200px)').matches;
+      
+      if (isMobile && CONFIG.autoOpenMobile) {
+        toggleChat();
+      } else if (!isMobile && CONFIG.autoOpenDesktop) {
+        toggleChat();
+      }
+    }
+    
+    // Check auto-open on init
+    checkAutoOpen();
     
     console.log('BlackOrbit Widget: Listo!', SESSION_ID);
   }
