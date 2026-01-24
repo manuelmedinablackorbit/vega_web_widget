@@ -199,15 +199,12 @@
         
         /* MESSAGES WRAPPER */
         .bo-messages-wrapper {
-          align-self: stretch;
           flex: 1;
-          justify-content: flex-start;
-          align-items: center;
-          display: inline-flex;
+          min-height: 0;
+          overflow: hidden;
         }
         .bo-messages {
-          flex: 1;
-          align-self: stretch;
+          height: 100%;
           padding: 12px;
           background: white;
           overflow-y: auto;
