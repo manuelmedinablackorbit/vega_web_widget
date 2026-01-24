@@ -116,20 +116,18 @@
           border: 1px solid #E1E8F2;
           display: none;
           flex-direction: column;
-          justify-content: flex-end;
-          align-items: flex-start;
           overflow: hidden;
         }
         .bo-window.open { display: flex; }
         
         /* HEADER */
         .bo-header {
-          align-self: stretch;
+          flex-shrink: 0;
           padding: 12px 16px 12px 12px;
           justify-content: flex-start;
           align-items: center;
           gap: 8px;
-          display: inline-flex;
+          display: flex;
           border-bottom: 1px solid #E1E8F2;
         }
         .bo-header-left {
@@ -235,20 +233,16 @@
         
         /* INPUT AREA */
         .bo-input-area {
-          align-self: stretch;
+          flex-shrink: 0;
           padding: 12px;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 12px;
           display: flex;
+          flex-direction: column;
+          gap: 12px;
         }
         .bo-input-container {
-          align-self: stretch;
-          justify-content: flex-start;
-          align-items: center;
+          width: 100%;
+          display: flex;
           gap: 8px;
-          display: inline-flex;
         }
         .bo-input-wrapper {
           flex: 1;
