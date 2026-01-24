@@ -788,10 +788,13 @@
     function checkAutoOpen() {
       const isMobile = window.matchMedia('(max-width: 1200px)').matches;
       
-      if (isMobile && CONFIG.autoOpenMobile) {
-        toggleChat();
-      } else if (!isMobile && CONFIG.autoOpenDesktop) {
-        toggleChat();
+      if ((isMobile && CONFIG.autoOpenMobile) || (!isMobile && CONFIG.autoOpenDesktop)) {
+        // Directly open without toggling
+        isOpen = true;
+        window.classList.add('open');
+        chatIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+        setTimeout(() => input.focus(), 100);
       }
     }
     
