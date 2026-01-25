@@ -522,8 +522,8 @@
         /* POWERED BY */
         .bo-powered {
           position: fixed;
-          bottom: 76px;
-          right: 360px;
+          bottom: 68px;
+          right: 216px;
           font-size: 11px;
           color: #5E7690;
           font-family: 'Poppins', sans-serif;
@@ -603,7 +603,12 @@
           }
           
           .bo-powered {
-            display: none;
+            position: fixed;
+            bottom: 68px;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            z-index: 1001;
           }
         }
       </style>
