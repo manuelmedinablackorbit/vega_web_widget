@@ -801,7 +801,7 @@
     }
     
     function showTyping() {
-      const typing = document.getElementById('bo-typing');
+      let typing = document.getElementById('bo-typing');
       if (!typing) {
         const typingMsg = document.createElement('div');
         typingMsg.className = 'bo-typing';
@@ -817,6 +817,7 @@
           </div>
         `;
         messages.appendChild(typingMsg);
+        typing = typingMsg;
       }
       typing.style.display = 'block';
       messages.scrollTop = messages.scrollHeight;
