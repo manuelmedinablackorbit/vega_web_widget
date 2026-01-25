@@ -639,6 +639,46 @@
         </svg>
       </button>
 
+      <!-- CHAT WINDOW -->
+      <div class="bo-window" id="bo-window">
+
+        <!-- MESSAGES -->
+        <div class="bo-messages-wrapper">
+          <div class="bo-messages" id="bo-messages">
+            <div class="bo-terms">
+              <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank">${CONFIG.termsLinkText}</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INPUT -->
+        <div class="bo-input-area">
+          <div class="bo-powered" id="bo-powered">
+            Powered by <a href="https://blackorbitai.com/" target="_blank" rel="noopener noreferrer">Black Orbit</a>
+          </div>
+          <div class="bo-input-container">
+            <div class="bo-input-wrapper">
+              <input type="text" class="bo-input" id="bo-input" placeholder="${CONFIG.inputPlaceholder}">
+            </div>
+            <button class="bo-send-btn" id="bo-send">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <g clip-path="url(#clip0_502_517)">
+                  <path d="M9.69067 14.4575C9.716 14.5206 9.76003 14.5744 9.81685 14.6118C9.87368 14.6492 9.94057 14.6683 10.0086 14.6665C10.0766 14.6648 10.1424 14.6423 10.1972 14.6021C10.2521 14.5618 10.2933 14.5058 10.3153 14.4415L14.6487 1.77479C14.67 1.71571 14.6741 1.65179 14.6604 1.59049C14.6467 1.52919 14.6159 1.47305 14.5715 1.42864C14.5271 1.38423 14.4709 1.35338 14.4096 1.33971C14.3483 1.32604 14.2844 1.33012 14.2253 1.35145L1.55867 5.68479C1.49433 5.70685 1.43829 5.74806 1.39805 5.8029C1.35781 5.85774 1.33532 5.92357 1.33357 5.99156C1.33183 6.05955 1.35093 6.12645 1.38831 6.18327C1.42568 6.24009 1.47955 6.28412 1.54267 6.30945L6.82934 8.42945C6.99646 8.49636 7.1483 8.59643 7.27571 8.72361C7.40312 8.85079 7.50346 9.00245 7.57067 9.16945L9.69067 14.4575Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14.5693 1.4314L7.276 8.72406" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_502_517">
+                    <rect width="16" height="16" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- TYPING (removido de aquí, ahora estará en messages) -->
+      </div>
+      
       <!-- HEADER (independiente en mobile) -->
       <div class="bo-header" id="bo-header">
         <div class="bo-header-left">
@@ -682,46 +722,6 @@
             </svg>
           </button>
         </div>
-      </div>
-
-      <!-- CHAT WINDOW -->
-      <div class="bo-window" id="bo-window">
-
-        <!-- MESSAGES -->
-        <div class="bo-messages-wrapper">
-          <div class="bo-messages" id="bo-messages">
-            <div class="bo-terms">
-              <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank">${CONFIG.termsLinkText}</a></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- INPUT -->
-        <div class="bo-input-area">
-          <div class="bo-powered" id="bo-powered">
-            Powered by <a href="https://blackorbitai.com/" target="_blank" rel="noopener noreferrer">Black Orbit</a>
-          </div>
-          <div class="bo-input-container">
-            <div class="bo-input-wrapper">
-              <input type="text" class="bo-input" id="bo-input" placeholder="${CONFIG.inputPlaceholder}">
-            </div>
-            <button class="bo-send-btn" id="bo-send">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <g clip-path="url(#clip0_502_517)">
-                  <path d="M9.69067 14.4575C9.716 14.5206 9.76003 14.5744 9.81685 14.6118C9.87368 14.6492 9.94057 14.6683 10.0086 14.6665C10.0766 14.6648 10.1424 14.6423 10.1972 14.6021C10.2521 14.5618 10.2933 14.5058 10.3153 14.4415L14.6487 1.77479C14.67 1.71571 14.6741 1.65179 14.6604 1.59049C14.6467 1.52919 14.6159 1.47305 14.5715 1.42864C14.5271 1.38423 14.4709 1.35338 14.4096 1.33971C14.3483 1.32604 14.2844 1.33012 14.2253 1.35145L1.55867 5.68479C1.49433 5.70685 1.43829 5.74806 1.39805 5.8029C1.35781 5.85774 1.33532 5.92357 1.33357 5.99156C1.33183 6.05955 1.35093 6.12645 1.38831 6.18327C1.42568 6.24009 1.47955 6.28412 1.54267 6.30945L6.82934 8.42945C6.99646 8.49636 7.1483 8.59643 7.27571 8.72361C7.40312 8.85079 7.50346 9.00245 7.57067 9.16945L9.69067 14.4575Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M14.5693 1.4314L7.276 8.72406" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_502_517">
-                    <rect width="16" height="16" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- TYPING (removido de aquí, ahora estará en messages) -->
       </div>
       
       <!-- IMAGE MODAL -->
