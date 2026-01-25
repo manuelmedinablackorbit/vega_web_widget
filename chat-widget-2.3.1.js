@@ -519,6 +519,34 @@
           40% { transform: scale(1); opacity: 1; }
         }
         
+        /* POWERED BY */
+        .bo-powered {
+          position: fixed;
+          bottom: 20px;
+          right: 40px;
+          font-size: 11px;
+          color: #5E7690;
+          font-family: 'Poppins', sans-serif;
+          z-index: 99998;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          transition: opacity 0.3s;
+        }
+        .bo-powered.hidden {
+          opacity: 0;
+          pointer-events: none;
+        }
+        .bo-powered a {
+          color: ${CONFIG.primaryColor};
+          text-decoration: none;
+          font-weight: 500;
+          transition: opacity 0.2s;
+        }
+        .bo-powered a:hover {
+          opacity: 0.8;
+        }
+        
         /* MOBILE FULLSCREEN */
         @media (max-width: 1200px) {
           .bo-window {
@@ -574,6 +602,10 @@
             left: 0;
             right: 0;
             z-index: 999;
+          }
+          
+          .bo-powered {
+            display: none;
           }
         }
       </style>
@@ -696,6 +728,11 @@
         </button>
         <img class="bo-image-modal-content" id="bo-image-modal-img" src="" alt="">
       </div>
+      
+      <!-- POWERED BY -->
+      <div class="bo-powered" id="bo-powered">
+        Powered by <a href="https://blackorbitai.com/" target="_blank" rel="noopener noreferrer">Black Orbit</a>
+      </div>
     `;
     
     return widget;
@@ -719,6 +756,7 @@
     const imageModal = document.getElementById('bo-image-modal');
     const imageModalImg = document.getElementById('bo-image-modal-img');
     const imageModalClose = document.getElementById('bo-image-modal-close');
+    const poweredBy = document.getElementById('bo-powered');
     
     let isOpen = false;
     let hasMessages = false;
@@ -745,11 +783,13 @@
         window.classList.add('open');
         chatIcon.style.display = 'none';
         closeIcon.style.display = 'block';
+        poweredBy.classList.add('hidden');
         setTimeout(() => input.focus(), 100);
       } else {
         window.classList.remove('open');
         chatIcon.style.display = 'block';
         closeIcon.style.display = 'none';
+        poweredBy.classList.remove('hidden');
       }
     }
     
