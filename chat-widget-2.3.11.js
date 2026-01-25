@@ -587,10 +587,10 @@
           
           .bo-messages-wrapper {
             position: fixed;
-            top: 49px;
+            top: 56px;
             left: 0;
             right: 0;
-            bottom: 64px;
+            bottom: 96.5px;
             padding-top: 0;
           }
           
