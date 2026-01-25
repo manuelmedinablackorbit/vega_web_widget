@@ -605,6 +605,10 @@
           .bo-window.dark .bo-input-area {
             background: #010618;
           }
+          
+          .bo-input {
+            font-size: 16px;
+          }
         }
       </style>
 
