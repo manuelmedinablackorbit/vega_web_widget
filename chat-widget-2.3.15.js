@@ -141,6 +141,25 @@
         .bo-window.open ~ .bo-header {
           display: flex;
         }
+        
+        /* Desktop: header visualmente dentro del window */
+        @media (min-width: 1201px) {
+          .bo-header {
+            position: fixed;
+            bottom: 596px;
+            right: 40px;
+            width: 320px;
+            border-radius: 16px 16px 0 0;
+            border: 1px solid #E1E8F2;
+            border-bottom: none;
+            background: white;
+            z-index: 100000;
+          }
+          .bo-window.dark ~ .bo-header {
+            background: #010618;
+            border-color: #18293F;
+          }
+        }
         .bo-header-left {
           flex: 1;
           justify-content: flex-start;
@@ -155,7 +174,8 @@
           line-height: 24px;
           transition: color 0.3s;
         }
-        .bo-window.dark .bo-title {
+        .bo-window.dark .bo-title,
+        .bo-window.dark ~ .bo-header .bo-title {
           color: #F9FAFC;
         }
         .bo-status {
@@ -578,7 +598,7 @@
           
           .bo-header {
             display: none;
-            position: fixed;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
