@@ -274,7 +274,7 @@
           padding: 12px;
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 8px;
         }
         .bo-input-container {
           width: 100%;
@@ -489,21 +489,32 @@
         
         /* TYPING */
         .bo-typing {
-          padding: 8px 12px;
-          background: white;
-          border-top: 1px solid #E1E8F2;
           display: none;
-          font-size: 12px;
-          color: #5E7690;
+          margin-bottom: 12px;
         }
-        .bo-window.dark .bo-typing {
-          background: #010618;
-          border-top-color: #18293F;
+        .bo-typing .bo-bubble {
+          max-width: 80%;
+          padding: 10px 14px;
+          border-radius: 12px;
+          font-size: 14px;
+          line-height: 1.5;
+          background: #F0F5F9;
+          color: #5E7690;
+          border: 1px solid #E1E8F2;
+          border-bottom-left-radius: 4px;
+          transition: background 0.3s, border-color 0.3s, color 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .bo-window.dark .bo-typing .bo-bubble {
+          background: #18293F;
+          border-color: #2E425A;
+          color: #8CA3BB;
         }
         .bo-typing-dots {
           display: inline-flex;
           gap: 2px;
-          margin-right: 8px;
         }
         .bo-typing-dot {
           width: 4px;
@@ -511,6 +522,9 @@
           background: #5E7690;
           border-radius: 50%;
           animation: bo-typing 1.4s infinite ease-in-out;
+        }
+        .bo-window.dark .bo-typing-dot {
+          background: #8CA3BB;
         }
         .bo-typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .bo-typing-dot:nth-child(2) { animation-delay: -0.16s; }
@@ -521,18 +535,16 @@
         
         /* POWERED BY */
         .bo-powered {
-          position: fixed;
-          bottom: 68px;
-          right: 216px;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
           font-size: 11px;
           color: #5E7690;
           font-family: 'Poppins', sans-serif;
-          z-index: 99998;
-          display: none;
-          align-items: center;
-          gap: 4px;
+          padding: 4px 0;
         }
-        .bo-window.open ~ .bo-powered {
+        .bo-window.open .bo-powered {
           display: flex;
         }
         .bo-powered a {
@@ -592,23 +604,6 @@
           }
           .bo-window.dark .bo-input-area {
             background: #010618;
-          }
-          
-          .bo-typing {
-            position: fixed;
-            bottom: 64px;
-            left: 0;
-            right: 0;
-            z-index: 999;
-          }
-          
-          .bo-powered {
-            position: fixed;
-            bottom: 68px;
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-            z-index: 1001;
           }
         }
       </style>
@@ -691,6 +686,9 @@
 
         <!-- INPUT -->
         <div class="bo-input-area">
+          <div class="bo-powered" id="bo-powered">
+            Powered by <a href="https://blackorbitai.com/" target="_blank" rel="noopener noreferrer">Black Orbit</a>
+          </div>
           <div class="bo-input-container">
             <div class="bo-input-wrapper">
               <input type="text" class="bo-input" id="bo-input" placeholder="${CONFIG.inputPlaceholder}">
@@ -711,15 +709,7 @@
           </div>
         </div>
 
-        <!-- TYPING -->
-        <div class="bo-typing" id="bo-typing">
-          <span class="bo-typing-dots">
-            <span class="bo-typing-dot"></span>
-            <span class="bo-typing-dot"></span>
-            <span class="bo-typing-dot"></span>
-          </span>
-          Escribiendo...
-        </div>
+        <!-- TYPING (removido de aquí, ahora estará en messages) -->
       </div>
       
       <!-- IMAGE MODAL -->
@@ -730,11 +720,6 @@
           </svg>
         </button>
         <img class="bo-image-modal-content" id="bo-image-modal-img" src="" alt="">
-      </div>
-      
-      <!-- POWERED BY -->
-      <div class="bo-powered" id="bo-powered">
-        Powered by <a href="https://blackorbitai.com/" target="_blank" rel="noopener noreferrer">Black Orbit</a>
       </div>
     `;
     
@@ -752,7 +737,6 @@
     const input = document.getElementById('bo-input');
     const send = document.getElementById('bo-send');
     const messages = document.getElementById('bo-messages');
-    const typing = document.getElementById('bo-typing');
     const chatIcon = document.getElementById('bo-icon-chat');
     const closeIcon = document.getElementById('bo-icon-close');
     const themeToggle = document.getElementById('bo-theme-toggle');
@@ -817,11 +801,32 @@
     }
     
     function showTyping() {
+      const typing = document.getElementById('bo-typing');
+      if (!typing) {
+        const typingMsg = document.createElement('div');
+        typingMsg.className = 'bo-typing';
+        typingMsg.id = 'bo-typing';
+        typingMsg.innerHTML = `
+          <div class="bo-bubble">
+            <span class="bo-typing-dots">
+              <span class="bo-typing-dot"></span>
+              <span class="bo-typing-dot"></span>
+              <span class="bo-typing-dot"></span>
+            </span>
+            Escribiendo...
+          </div>
+        `;
+        messages.appendChild(typingMsg);
+      }
       typing.style.display = 'block';
+      messages.scrollTop = messages.scrollHeight;
     }
     
     function hideTyping() {
-      typing.style.display = 'none';
+      const typing = document.getElementById('bo-typing');
+      if (typing) {
+        typing.remove();
+      }
     }
     
     async function sendMessage(message) {
