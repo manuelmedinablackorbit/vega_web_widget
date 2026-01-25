@@ -522,20 +522,18 @@
         /* POWERED BY */
         .bo-powered {
           position: fixed;
-          bottom: 20px;
-          right: 40px;
+          bottom: 76px;
+          right: 360px;
           font-size: 11px;
           color: #5E7690;
           font-family: 'Poppins', sans-serif;
           z-index: 99998;
-          display: flex;
+          display: none;
           align-items: center;
           gap: 4px;
-          transition: opacity 0.3s;
         }
-        .bo-powered.hidden {
-          opacity: 0;
-          pointer-events: none;
+        .bo-window.open ~ .bo-powered {
+          display: flex;
         }
         .bo-powered a {
           color: ${CONFIG.primaryColor};
@@ -756,7 +754,6 @@
     const imageModal = document.getElementById('bo-image-modal');
     const imageModalImg = document.getElementById('bo-image-modal-img');
     const imageModalClose = document.getElementById('bo-image-modal-close');
-    const poweredBy = document.getElementById('bo-powered');
     
     let isOpen = false;
     let hasMessages = false;
@@ -783,13 +780,11 @@
         window.classList.add('open');
         chatIcon.style.display = 'none';
         closeIcon.style.display = 'block';
-        poweredBy.classList.add('hidden');
         setTimeout(() => input.focus(), 100);
       } else {
         window.classList.remove('open');
         chatIcon.style.display = 'block';
         closeIcon.style.display = 'none';
-        poweredBy.classList.remove('hidden');
       }
     }
     
