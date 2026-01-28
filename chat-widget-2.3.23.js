@@ -79,10 +79,9 @@
     widget.innerHTML = `
       <style>
         #blackorbit-widget {
-          ${CONFIG.embedMode ? '' : 'position: fixed; bottom: 40px; right: 40px;'}
+          ${CONFIG.embedMode ? 'width: 100%; height: 100%;' : 'position: fixed; bottom: 40px; right: 40px;'}
           z-index: 99999;
           font-family: 'Poppins', sans-serif;
-          ${CONFIG.embedMode ? 'width: 100%; height: 100%;' : ''}
         }
         #blackorbit-widget * { box-sizing: border-box; }
         
@@ -106,11 +105,18 @@
         
         /* CHAT WINDOW */
         .bo-window {
+          background: white;
+          box-shadow: 0 12px 24px rgba(94,118,144,0.2);
+          border-radius: 16px;
+          border: 1px solid #E1E8F2;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
           ${CONFIG.embedMode ? `
-            position: relative;
             width: 100%;
             height: 100%;
-            display: flex;
+            position: relative;
           ` : `
             position: fixed;
             bottom: 96px;
@@ -119,13 +125,6 @@
             height: 500px;
             display: none;
           `}
-          background: white;
-          box-shadow: 0 12px 24px rgba(94,118,144,0.2);
-          border-radius: 16px;
-          border: 1px solid #E1E8F2;
-          flex-direction: column;
-          overflow: hidden;
-          transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
         ${!CONFIG.embedMode ? '.bo-window.open { display: flex; }' : ''}
         
@@ -144,6 +143,11 @@
           align-items: center;
           gap: 8px;
           display: flex;
+          background: white;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-header {
+          background: #010618;
         }
         .bo-header-left {
           flex: 1;
@@ -235,17 +239,20 @@
         }
         .bo-close-btn:hover { background: #f1f5f9; }
         
-        /* MESSAGES WRAPPER */
+        /* MESSAGES WRAPPER - This is the scrollable area */
         .bo-messages-wrapper {
           flex: 1;
           min-height: 0;
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
         }
         .bo-messages {
-          height: 100%;
+          flex: 1;
           padding: 12px;
           background: white;
           overflow-y: auto;
+          overflow-x: hidden;
           transition: background 0.3s;
           display: flex;
           flex-direction: column;
@@ -346,6 +353,11 @@
           display: flex;
           flex-direction: column;
           gap: 8px;
+          background: white;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-input-area {
+          background: #010618;
         }
         .bo-input-container {
           width: 100%;
