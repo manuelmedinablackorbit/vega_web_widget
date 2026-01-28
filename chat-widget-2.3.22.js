@@ -13,7 +13,8 @@
     termsMessage: userConfig.termsMessage || 'Al utilizar este chat aceptas nuestra Política de Privacidad de Datos, la cual puedes consultar',
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
-    darkMode: userConfig.darkMode || false
+    darkMode: userConfig.darkMode || false,
+    embedMode: userConfig.embedMode || false
   };
 
   if (!CONFIG.webhookUrl) {
@@ -78,11 +79,10 @@
     widget.innerHTML = `
       <style>
         #blackorbit-widget {
-          position: fixed;
-          bottom: 40px;
-          right: 40px;
+          ${CONFIG.embedMode ? '' : 'position: fixed; bottom: 40px; right: 40px;'}
           z-index: 99999;
           font-family: 'Poppins', sans-serif;
+          ${CONFIG.embedMode ? 'width: 100%; height: 100%;' : ''}
         }
         #blackorbit-widget * { box-sizing: border-box; }
         
@@ -95,7 +95,7 @@
           border-radius: 9999px;
           border: none;
           cursor: pointer;
-          display: inline-flex;
+          display: ${CONFIG.embedMode ? 'none' : 'inline-flex'};
           justify-content: center;
           align-items: center;
           box-shadow: 0 12px 24px rgba(94,118,144,0.2);
@@ -106,21 +106,28 @@
         
         /* CHAT WINDOW */
         .bo-window {
-          position: fixed;
-          bottom: 96px;
-          right: 40px;
-          width: 320px;
-          height: 500px;
+          ${CONFIG.embedMode ? `
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+          ` : `
+            position: fixed;
+            bottom: 96px;
+            right: 40px;
+            width: 320px;
+            height: 500px;
+            display: none;
+          `}
           background: white;
           box-shadow: 0 12px 24px rgba(94,118,144,0.2);
           border-radius: 16px;
           border: 1px solid #E1E8F2;
-          display: none;
           flex-direction: column;
           overflow: hidden;
           transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-        .bo-window.open { display: flex; }
+        ${!CONFIG.embedMode ? '.bo-window.open { display: flex; }' : ''}
         
         /* DARK MODE */
         .bo-window.dark {
@@ -220,7 +227,7 @@
           background: none;
           border: none;
           cursor: pointer;
-          display: flex;
+          display: ${CONFIG.embedMode ? 'none' : 'flex'};
           justify-content: flex-start;
           align-items: center;
           gap: 8px;
@@ -602,7 +609,7 @@
         
         /* POWERED BY */
         .bo-powered {
-          display: none;
+          display: ${CONFIG.embedMode ? 'flex' : 'none'};
           align-items: center;
           justify-content: center;
           gap: 4px;
@@ -611,9 +618,7 @@
           font-family: 'Poppins', sans-serif;
           padding: 4px 0;
         }
-        .bo-window.open .bo-powered {
-          display: flex;
-        }
+        ${!CONFIG.embedMode ? '.bo-window.open .bo-powered { display: flex; }' : ''}
         .bo-powered a {
           color: ${CONFIG.primaryColor};
           text-decoration: none;
@@ -624,7 +629,8 @@
           opacity: 0.8;
         }
         
-        /* MOBILE FULLSCREEN */
+        /* MOBILE FULLSCREEN - Only for non-embed mode */
+        ${!CONFIG.embedMode ? `
         @media (max-width: 1200px) {
           .bo-window {
             position: fixed !important;
@@ -677,6 +683,7 @@
             font-size: 16px;
           }
         }
+        ` : ''}
       </style>
 
       <!-- TOGGLE BUTTON -->
@@ -700,7 +707,7 @@
       </button>
 
       <!-- CHAT WINDOW -->
-      <div class="bo-window" id="bo-window">
+      <div class="bo-window ${CONFIG.embedMode ? 'open' : ''}" id="bo-window">
         <!-- HEADER -->
         <div class="bo-header">
           <div class="bo-header-left">
@@ -796,8 +803,6 @@
             </button>
           </div>
         </div>
-
-        <!-- TYPING (removido de aquí, ahora estará en messages) -->
       </div>
       
       <!-- IMAGE MODAL -->
@@ -817,7 +822,23 @@
   // ========== INIT ==========
   function init() {
     const widget = createWidget();
-    document.body.appendChild(widget);
+    
+    // Determine where to append the widget
+    if (CONFIG.embedMode) {
+      // Find the current script tag to get its parent container
+      const currentScript = document.currentScript || document.querySelector('script[src*="chat-widget"]');
+      
+      if (currentScript && currentScript.parentElement) {
+        currentScript.parentElement.appendChild(widget);
+        console.log('BlackOrbit Widget: Embed mode - appended to parent container');
+      } else {
+        console.warn('BlackOrbit Widget: Could not find parent container, falling back to body');
+        document.body.appendChild(widget);
+      }
+    } else {
+      // Float mode - append to body
+      document.body.appendChild(widget);
+    }
     
     const toggle = document.getElementById('bo-toggle');
     const window = document.getElementById('bo-window');
@@ -832,7 +853,7 @@
     const imageModalImg = document.getElementById('bo-image-modal-img');
     const imageModalClose = document.getElementById('bo-image-modal-close');
     
-    let isOpen = false;
+    let isOpen = CONFIG.embedMode; // Start open if in embed mode
     let hasMessages = false;
     let whatsAppClicked = 'no';
     let isDark = CONFIG.darkMode;
@@ -840,6 +861,11 @@
     // Apply dark mode on init if enabled
     if (isDark) {
       window.classList.add('dark');
+    }
+    
+    // Auto-focus input if in embed mode
+    if (CONFIG.embedMode) {
+      setTimeout(() => input.focus(), 100);
     }
     
     function toggleDarkMode() {
@@ -970,8 +996,12 @@
       }
     }
     
-    toggle.addEventListener('click', toggleChat);
-    close.addEventListener('click', toggleChat);
+    // Only add toggle/close listeners if not in embed mode
+    if (!CONFIG.embedMode) {
+      toggle.addEventListener('click', toggleChat);
+      close.addEventListener('click', toggleChat);
+    }
+    
     themeToggle.addEventListener('click', toggleDarkMode);
     send.addEventListener('click', handleSend);
     input.addEventListener('keydown', (e) => {
@@ -1014,7 +1044,7 @@
       }
     });
     
-    console.log('BlackOrbit Widget: Listo!', SESSION_ID);
+    console.log('BlackOrbit Widget: Listo!', SESSION_ID, CONFIG.embedMode ? '(Embed Mode)' : '(Float Mode)');
   }
 
   if (document.readyState === 'loading') {
