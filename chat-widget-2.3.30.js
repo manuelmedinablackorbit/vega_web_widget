@@ -14,7 +14,8 @@
     termsLinkText: userConfig.termsLinkText || 'Aquí',
     termsLinkUrl: userConfig.termsLinkUrl || 'https://www.google.com/',
     darkMode: userConfig.darkMode || false,
-    embedMode: userConfig.embedMode || false
+    embedMode: userConfig.embedMode || false,
+    fontFamily: userConfig.fontFamily || 'Poppins'
   };
 
   if (!CONFIG.webhookUrl) {
@@ -63,9 +64,11 @@
     return sanitize(html);
   }
 
-  // ========== LOAD POPPINS FONT ==========
+  // ========== LOAD GOOGLE FONT ==========
   const fontLink = document.createElement('link');
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
+  // Convert font name to Google Fonts URL format (replace spaces with +)
+  const fontNameForUrl = CONFIG.fontFamily.replace(/\s+/g, '+');
+  fontLink.href = `https://fonts.googleapis.com/css2?family=${fontNameForUrl}:wght@400;500;600;700&display=swap`;
   fontLink.rel = 'stylesheet';
   document.head.appendChild(fontLink);
 
@@ -81,7 +84,7 @@
         #blackorbit-widget {
           ${CONFIG.embedMode ? 'width: 100%; height: 100%;' : 'position: fixed; bottom: 40px; right: 40px;'}
           z-index: 99999;
-          font-family: 'Poppins', sans-serif;
+          font-family: '${CONFIG.fontFamily}', sans-serif;
         }
         #blackorbit-widget * { box-sizing: border-box; }
         
@@ -306,7 +309,7 @@
           text-align: center;
           color: #010618;
           font-size: 14px;
-          font-family: 'Poppins', sans-serif;
+          font-family: '${CONFIG.fontFamily}', sans-serif;
           font-weight: 600;
           line-height: 24px;
           transition: color 0.3s;
@@ -319,14 +322,14 @@
           text-align: center;
           color: #5E7690;
           font-size: 14px;
-          font-family: 'Poppins', sans-serif;
+          font-family: '${CONFIG.fontFamily}', sans-serif;
           font-weight: 400;
           line-height: 18px;
         }
         .bo-terms-link {
           color: #010618;
           font-size: 14px;
-          font-family: 'Poppins', sans-serif;
+          font-family: '${CONFIG.fontFamily}', sans-serif;
           font-weight: 400;
           text-decoration: underline;
           line-height: 18px;
@@ -386,7 +389,7 @@
           outline: none;
           color: #010618;
           font-size: 14px;
-          font-family: 'Poppins';
+          font-family: '${CONFIG.fontFamily}';
           font-weight: 400;
           line-height: 24px;
           transition: color 0.3s;
@@ -624,7 +627,7 @@
           gap: 4px;
           font-size: 11px;
           color: #5E7690;
-          font-family: 'Poppins', sans-serif;
+          font-family: '${CONFIG.fontFamily}', sans-serif;
           padding: 4px 0;
         }
         ${!CONFIG.embedMode ? '.bo-window.open .bo-powered { display: flex; }' : ''}
