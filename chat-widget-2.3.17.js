@@ -240,6 +240,9 @@
           background: white;
           overflow-y: auto;
           transition: background 0.3s;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
         }
         .bo-window.dark .bo-messages {
           background: #010618;
