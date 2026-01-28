@@ -251,9 +251,9 @@
           background: white;
           overflow-y: auto;
           transition: background 0.3s;
-          display: flex;
           flex-direction: column;
           justify-content: flex-end;
+          align-content: end;
         }
         .bo-window.dark .bo-messages {
           background: #010618;
