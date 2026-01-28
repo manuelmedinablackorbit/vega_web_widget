@@ -115,7 +115,7 @@
           transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
           ${CONFIG.embedMode ? `
             width: 100%;
-            height: 100%;
+            height: 100vh;
             position: relative;
           ` : `
             position: fixed;
