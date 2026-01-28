@@ -307,7 +307,7 @@
           background: transparent;
           border: none;
           outline: none;
-          color: #5E7690;
+          color: #010618;
           font-size: 14px;
           font-family: 'Poppins';
           font-weight: 400;
@@ -323,6 +323,9 @@
         }
         .bo-window.dark .bo-input-wrapper:focus-within {
           background: #18293F;
+        }
+        .bo-window.dark .bo-input {
+          color: #ffffff;
         }
         .bo-attach-icon {
           width: 16px;
