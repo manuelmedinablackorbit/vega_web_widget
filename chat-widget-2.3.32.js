@@ -129,6 +129,28 @@
             display: none;
           `}
         }
+        .bo-window {
+          background: white;
+          ${CONFIG.embedMode ? '' : 'box-shadow: 0 12px 24px rgba(94,118,144,0.2);'}
+          border-radius: 16px;
+          border: 1px solid #E1E8F2;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+          ${CONFIG.embedMode ? `
+            width: 100%;
+            height: 100vh;
+            position: relative;
+          ` : `
+            position: fixed;
+            bottom: 96px;
+            right: 40px;
+            width: 320px;
+            height: 500px;
+            display: none;
+          `}
+        }
         ${!CONFIG.embedMode ? '.bo-window.open { display: flex; }' : ''}
         
         /* DARK MODE */
