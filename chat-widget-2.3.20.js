@@ -248,28 +248,89 @@
           background: #010618;
         }
         
-        /* TERMS BANNER */
+        /* TERMS BANNER - NEW DESIGN */
+        .bo-terms-wrapper {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         .bo-terms {
-          background: white;
-          border: 1px solid #E1E8F2;
+          width: 100%;
+          padding-left: 20px;
+          padding-right: 20px;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          display: flex;
+        }
+        .bo-terms-icon-container {
+          width: 40px;
+          height: 40px;
+          padding: 8px;
+          background: #F0F5F9;
           border-radius: 8px;
-          padding: 16px;
-          margin: 80px 0 20px 0;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          transition: background 0.3s;
+        }
+        .bo-window.dark .bo-terms-icon-container {
+          background: #18293F;
+        }
+        .bo-terms-icon {
+          width: 16px;
+          height: 16px;
+        }
+        .bo-terms-icon path {
+          stroke: #010618;
+          transition: stroke 0.3s;
+        }
+        .bo-window.dark .bo-terms-icon path {
+          stroke: #ffffff;
+        }
+        .bo-terms-title {
           text-align: center;
+          color: #010618;
+          font-size: 14px;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 600;
+          line-height: 24px;
+          transition: color 0.3s;
         }
-        .bo-terms p {
-          margin: 0;
+        .bo-window.dark .bo-terms-title {
+          color: #ffffff;
+        }
+        .bo-terms-text {
+          align-self: stretch;
+          text-align: center;
           color: #5E7690;
-          font-size: 13px;
-          line-height: 1.5;
+          font-size: 14px;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 400;
+          line-height: 18px;
         }
-        .bo-terms a {
-          color: ${CONFIG.primaryColor};
-          text-decoration: none;
-          font-weight: 500;
+        .bo-terms-link {
+          color: #010618;
+          font-size: 14px;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 400;
+          text-decoration: underline;
+          line-height: 18px;
+          cursor: pointer;
+          transition: color 0.3s, opacity 0.2s;
         }
-        .bo-terms a:hover { text-decoration: underline; }
-        .bo-messages.has-messages .bo-terms { display: none; }
+        .bo-terms-link:hover {
+          opacity: 0.8;
+        }
+        .bo-window.dark .bo-terms-link {
+          color: #ffffff;
+        }
+        .bo-messages.has-messages .bo-terms-wrapper { 
+          display: none; 
+        }
         
         /* INPUT AREA */
         .bo-input-area {
@@ -688,8 +749,25 @@
         <!-- MESSAGES -->
         <div class="bo-messages-wrapper">
           <div class="bo-messages" id="bo-messages">
-            <div class="bo-terms">
-              <p>${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank">${CONFIG.termsLinkText}</a></p>
+            <div class="bo-terms-wrapper">
+              <div class="bo-terms">
+                <div class="bo-terms-icon-container">
+                  <svg class="bo-terms-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.33325 4H3.99992" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1.33325 6.66675H3.99992" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1.33325 9.33325H3.99992" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1.33325 12H3.99992" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.0001 1.33325H4.00008C3.2637 1.33325 2.66675 1.93021 2.66675 2.66659V13.3333C2.66675 14.0696 3.2637 14.6666 4.00008 14.6666H12.0001C12.7365 14.6666 13.3334 14.0696 13.3334 13.3333V2.66659C13.3334 1.93021 12.7365 1.33325 12.0001 1.33325Z" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.33325 5.33325H9.66659" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.33325 8H10.6666" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.33325 10.6667H9.33325" stroke="#010618" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="bo-terms-title">Términos y Condiciones</div>
+                <div class="bo-terms-text">
+                  ${CONFIG.termsMessage} <a href="${CONFIG.termsLinkUrl}" target="_blank" class="bo-terms-link">${CONFIG.termsLinkText}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
