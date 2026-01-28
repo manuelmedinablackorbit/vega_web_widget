@@ -244,15 +244,12 @@
           flex: 1;
           min-height: 0;
           overflow: hidden;
-          display: flex;
-          flex-direction: column;
         }
         .bo-messages {
-          flex: 1;
+          height: 100%;
           padding: 12px;
           background: white;
           overflow-y: auto;
-          overflow-x: hidden;
           transition: background 0.3s;
           display: flex;
           flex-direction: column;
